@@ -159,9 +159,24 @@ export default function AdminPage() {
   return (
     <div className="min-h-screen bg-black text-white p-6 md:p-12">
       <div className="max-w-6xl mx-auto">
-        <header className="flex justify-between items-center mb-12">
-          <h1 className="text-4xl font-black tracking-tighter">ADMIN <span className="text-cyan-400">DASHBOARD</span></h1>
-          <button onClick={() => setIsLoggedIn(false)} className="bg-white/5 px-4 py-2 rounded-xl text-gray-400 hover:text-white">LOGOUT</button>
+        <header className="mb-12">
+          <div className="flex justify-between items-center mb-4">
+             <h1 className="text-4xl font-black tracking-tighter">ADMIN <span className="text-cyan-400">DASHBOARD</span></h1>
+             <button onClick={() => setIsLoggedIn(false)} className="bg-white/5 px-4 py-2 rounded-xl text-gray-400 hover:text-white">LOGOUT</button>
+          </div>
+          
+          {/* Storage Status Banner */}
+          <div className={`p-3 rounded-xl border flex items-center justify-between transition-all ${songs.length > 0 ? (songs[0].file?.startsWith('http') ? 'bg-cyan-500/10 border-cyan-500/30 text-cyan-400' : 'bg-orange-500/10 border-orange-500/30 text-orange-400') : 'bg-white/5 border-white/10 text-gray-400'}`}>
+             <div className="flex items-center gap-3">
+               <div className={`w-2 h-2 rounded-full animate-pulse ${songs.length > 0 ? (songs[0].file?.startsWith('http') ? 'bg-cyan-400' : 'bg-orange-400') : 'bg-gray-400'}`} />
+               <span className="text-xs font-black uppercase tracking-widest">
+                 Storage Status: {songs.length > 0 ? (songs[0].file?.startsWith('http') ? 'Cloud (Permanent - Render Ready)' : 'Local (Temporary - WILL BE DELETED ON RENDER)') : 'Connecting...'}
+               </span>
+             </div>
+             {songs.length > 0 && !songs[0].file?.startsWith('http') && (
+               <span className="text-[10px] font-bold underline">Add CLOUDINARY_URL to Render and refresh to fix!</span>
+             )}
+          </div>
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
