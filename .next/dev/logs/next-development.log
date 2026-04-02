@@ -1,0 +1,9 @@
+{"timestamp":"00:00:01.384","source":"Server","level":"LOG","message":""}
+{"timestamp":"00:00:28.920","source":"Server","level":"LOG","message":"○ Compiling /admin ..."}
+{"timestamp":"00:00:30.597","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
+{"timestamp":"00:00:37.267","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
+{"timestamp":"00:00:50.225","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
+{"timestamp":"00:01:21.994","source":"Server","level":"LOG","message":"File uploaded to: E:\\UDAYA-PORTFOLIO\\UDAYA-LYRICIST\\public\\imaye-imaye-m-mobitones-net-17907 (15).mp3"}
+{"timestamp":"00:01:28.047","source":"Server","level":"LOG","message":"PUT Request for ID: \"69cec412753f517981cc40df\""}
+{"timestamp":"00:01:28.062","source":"Server","level":"ERROR","message":"(node:20268) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.\n(Use `node --trace-warnings ...` to show where the warning was created)"}
+{"timestamp":"00:01:33.682","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
