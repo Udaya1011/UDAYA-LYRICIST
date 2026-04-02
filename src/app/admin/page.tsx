@@ -67,16 +67,9 @@ export default function AdminPage() {
         fetchSongs();
       } else {
         const rawText = await res.text();
-        console.log("Raw API Response:", rawText);
-        let errorData = {};
-        try {
-           errorData = JSON.parse(rawText);
-        } catch (e) {}
-        console.error("API Error Response Data:", errorData);
         alert(`Save Failed: ${rawText || "Check Server Logs"}`);
       }
     } catch (error) {
-      console.error("Fetch/Network Error:", error);
       alert("Network Error: Could not connect to Atlas.");
     }
   };
@@ -128,31 +121,19 @@ export default function AdminPage() {
     }
     
     if (confirm("Are you sure you want to delete this song from Atlas?")) {
-      console.log("Attempting to delete ID:", id);
-      
       const previousSongs = [...songs];
       setSongs(songs.filter(s => s._id !== id));
 
       try {
         const res = await fetch(`/api/songs/${id}`, { method: "DELETE" });
-        console.log("Delete Status:", res.status);
-        
-        const rawText = await res.text();
-        console.log("Raw Delete Response:", rawText);
-
         if (res.ok) {
-           console.log("Delete confirmed on server.");
            fetchSongs();
         } else {
-           let errorData = { error: "Unknown Error" };
-           try { errorData = JSON.parse(rawText); } catch(e) {}
-           
-           console.error("Delete failed details:", errorData);
-           alert(`Delete failed (Status ${res.status}): ${errorData.error || rawText}`);
+           const rawText = await res.text();
+           alert(`Delete failed (Status ${res.status}): ${rawText}`);
            setSongs(previousSongs);
         }
       } catch (err: any) {
-        console.error("Network error during delete:", err);
         alert(`Network error: ${err.message}`);
         setSongs(previousSongs);
       }
@@ -189,8 +170,9 @@ export default function AdminPage() {
             <form onSubmit={handleAddSong} className="space-y-4">
               <input type="text" value={newSong.title} onChange={(e)=>setNewSong({...newSong, title:e.target.value})} placeholder="Title" className="w-full bg-white/5 border border-white/10 rounded-lg p-2.5 text-sm" />
               <input type="text" value={newSong.desc} onChange={(e)=>setNewSong({...newSong, desc:e.target.value})} placeholder="Description" className="w-full bg-white/5 border border-white/10 rounded-lg p-2.5 text-sm" />
+              
               <div className="space-y-1">
-                <label className="text-[10px] font-black uppercase text-gray-500">Thumbnail (URL or Upload)</label>
+                <label className="text-[10px] font-black uppercase text-gray-500">Thumbnail (Cloud URL or Upload)</label>
                 <div className="flex gap-2">
                   <input type="text" value={newSong.thumb} onChange={(e)=>setNewSong({...newSong, thumb:e.target.value})} placeholder="cover.jpg" className="flex-1 bg-white/5 border border-white/10 rounded-lg p-2.5 text-xs outline-none focus:border-cyan-400" />
                   <label className="bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 px-3 flex items-center rounded-lg cursor-pointer hover:bg-cyan-500/30">
@@ -201,7 +183,7 @@ export default function AdminPage() {
               </div>
 
               <div className="space-y-1">
-                <label className="text-[10px] font-black uppercase text-gray-500">Audio (Filename or Upload)</label>
+                <label className="text-[10px] font-black uppercase text-gray-500">Audio (Cloud URL or Upload)</label>
                 <div className="flex gap-2">
                   <input type="text" value={newSong.file} onChange={(e)=>setNewSong({...newSong, file:e.target.value})} placeholder="song.mpeg" className="flex-1 bg-white/5 border border-white/10 rounded-lg p-2.5 text-xs outline-none focus:border-purple-400" />
                   <label className="bg-purple-500/20 text-purple-400 border border-purple-500/30 px-3 flex items-center rounded-lg cursor-pointer hover:bg-purple-500/30">
@@ -210,6 +192,7 @@ export default function AdminPage() {
                   </label>
                 </div>
               </div>
+
               <input type="text" value={newSong.insta} onChange={(e)=>setNewSong({...newSong, insta:e.target.value})} placeholder="Instagram link" className="w-full bg-white/5 border border-white/10 rounded-lg p-2.5 text-sm" />
               <textarea rows={4} value={newSong.lyrics} onChange={(e)=>setNewSong({...newSong, lyrics:e.target.value})} placeholder="Tamil Lyrics" className="w-full bg-white/5 border border-white/10 rounded-lg p-2.5 text-sm resize-none" />
               <button 
@@ -218,13 +201,12 @@ export default function AdminPage() {
               >
                 {isUploading ? "Uploading..." : (editingSongId ? "Update" : "Save")}
               </button>
-              {editingSongId && <button type="button" onClick={()=>{setEditingSongId(null); setNewSong({title:"",desc:"",lyrics:"",insta:"",file:"",thumb:""})}} className="w-full text-xs text-red-500 mt-2 uppercase underline">Cancel</button>}
             </form>
           </div>
 
           <div className="lg:col-span-2">
             <h2 className="text-xl font-bold mb-6 text-purple-400 border-b border-white/10 pb-2">SONG LIST</h2>
-            <div className="space-y-4">
+            <div className="space-y-4 text-white">
               {isLoading ? <div className="text-center py-20 text-gray-500 uppercase tracking-widest animate-pulse">Connecting to Atlas...</div> : 
                 songs.map((song) => (
                   <div key={song._id} className="bg-white/5 border border-white/10 p-4 rounded-2xl flex justify-between items-center hover:bg-white/10">
@@ -234,18 +216,11 @@ export default function AdminPage() {
                           <img 
                             src={song.thumb.match(/^(http|\/|data:)/) ? song.thumb : `/${song.thumb}`} 
                             className="w-full h-full object-cover"
-                            onError={(e) => {
-                              // If it fails with root, try common folders as fallback
-                              const target = e.target as HTMLImageElement;
-                              if (!target.src.includes('/images/')) {
-                                target.src = `/images/${song.thumb}`;
-                              }
-                            }}
                           />
                         ) : <Music2 className="text-cyan-400" />}
                       </div>
                       <div>
-                        <h4 className="font-bold text-white">{song.title}</h4>
+                        <h4 className="font-bold">{song.title}</h4>
                         <p className="text-xs text-gray-500">{song.desc}</p>
                       </div>
                     </div>

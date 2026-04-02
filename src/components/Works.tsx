@@ -19,16 +19,16 @@ export default function Works() {
         const res = await fetch("/api/songs", { cache: "no-store" });
         const data = await res.json();
             const mapped = data.map((s: any) => {
-              const resovlePath = (val: string, prefix: string) => {
+              const resovlePath = (val: string) => {
                 if (!val) return null;
                 if (val.match(/^(http|\/|data:)/)) return val;
-                return `/${val}`; // Try root first
+                return `/${val}`;
               };
               
               return {
                 ...s,
-                audioPath: resovlePath(s.file, 'songs'),
-                thumbPath: resovlePath(s.thumb, 'images') || "https://images.unsplash.com/photo-1514525253361-bee8718a300a?auto=format&fit=crop&q=80&w=400"
+                audioPath: resovlePath(s.file),
+                thumbPath: resovlePath(s.thumb) || "https://images.unsplash.com/photo-1514525253361-bee8718a300a?auto=format&fit=crop&q=80&w=400"
               };
             });
             setSongs(mapped);
@@ -51,7 +51,7 @@ export default function Works() {
             if (audioRef.current) {
               audioRef.current.play()
                 .then(() => setIsPlaying(true))
-                .catch(() => { /* Silently fail on autoPlay errors */ });
+                .catch(() => {});
             }
           }, 1000);
         }
@@ -63,15 +63,8 @@ export default function Works() {
     if (!selected) {
       setIsPlaying(false);
       if (audioRef.current) audioRef.current.pause();
-      const url = new URL(window.location.href);
-      url.searchParams.delete("song");
-      url.searchParams.delete("play");
-      window.history.replaceState({}, "", url.pathname);
     } else {
       setHasAudio(!!selected.audioPath);
-      const url = new URL(window.location.href);
-      url.searchParams.set("song", selected._id);
-      window.history.replaceState({}, "", url.toString());
     }
   }, [selected]);
 
@@ -82,12 +75,10 @@ export default function Works() {
       audioRef.current.pause();
       setIsPlaying(false);
     } else {
-      // Catch playback errors (like unsupported source)
       audioRef.current.play()
         .then(() => setIsPlaying(true))
         .catch((err) => {
-          console.error("Playback Error:", err);
-          alert("Audio file not found or unsupported format. Please check your file name in the Admin panel.");
+          alert("Audio file not found or unsupported format.");
           setIsPlaying(false);
         });
     }
@@ -131,13 +122,13 @@ export default function Works() {
       )}
 
       <div className="container mx-auto px-6 relative z-10">
-        <div className="text-center mb-20 uppercase tracking-tighter">
+        <div className="text-center mb-20 uppercase tracking-tighter text-white">
           <motion.h2 className="text-5xl md:text-7xl font-black mb-4">LATEST <span className="text-cyan-400">SONGS</span></motion.h2>
           <div className="w-24 h-1.5 bg-cyan-400 mx-auto rounded-full mb-6" />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {songs.map((work, i) => (
+          {songs.map((work) => (
             <motion.div key={work._id} className="group cursor-pointer" onClick={() => setSelected(work)}>
               <div className="glass-card overflow-hidden h-full border border-white/5 hover:border-cyan-400/50 transition-all">
                 <div className="h-56 relative overflow-hidden">
@@ -147,7 +138,7 @@ export default function Works() {
                   </div>
                 </div>
                 <div className="p-6 text-center">
-                  <h3 className="text-2xl font-black text-white group-hover:text-cyan-400 transition-colors">{work.title}</h3>
+                  <h3 className="text-2xl font-black text-white group-hover:text-cyan-400 transition-colors uppercase tracking-tight">{work.title}</h3>
                   <p className="text-gray-500 text-sm mt-2">{work.desc}</p>
                 </div>
               </div>
@@ -162,10 +153,10 @@ export default function Works() {
             <div className="absolute inset-0 bg-black/95 backdrop-blur-xl" onClick={() => setSelected(null)} />
             <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="glass-card w-full max-w-4xl max-h-[90vh] overflow-y-auto p-6 md:p-12 relative shadow-2xl">
               <button onClick={() => setSelected(null)} className="absolute top-6 right-6 text-gray-500 hover:text-white"><X size={32} /></button>
-              <div className="flex flex-col md:flex-row gap-12">
+              <div className="flex flex-col md:flex-row gap-12 text-white">
                 <div className="md:w-1/2 space-y-8">
                   <div>
-                    <h3 className="text-3xl md:text-5xl font-black mb-4 uppercase tracking-tighter text-white">{selected.title}</h3>
+                    <h3 className="text-3xl md:text-5xl font-black mb-4 uppercase tracking-tighter">{selected.title}</h3>
                     <p className="text-gray-400 border-l-2 border-cyan-400 pl-4">{selected.desc}</p>
                   </div>
                   <div className="space-y-4">
@@ -185,14 +176,8 @@ export default function Works() {
                              <span className="text-[10px] font-black text-cyan-400 uppercase tracking-widest">Listen Now</span>
                              <span className="text-[10px] font-mono text-gray-400">{formatTime(currentTime)} / {formatTime(duration)}</span>
                           </div>
-                          <div 
-                            className="h-1.5 bg-white/10 rounded-full relative cursor-pointer group"
-                            onClick={handleSeek}
-                          >
-                             <div 
-                               className="h-full bg-cyan-400 rounded-full relative transition-all duration-100" 
-                               style={{ width: `${(currentTime / (duration || 1)) * 100}%` }}
-                             >
+                          <div className="h-1.5 bg-white/10 rounded-full relative cursor-pointer group" onClick={handleSeek}>
+                             <div className="h-full bg-cyan-400 rounded-full relative transition-all duration-100" style={{ width: `${(currentTime / (duration || 1)) * 100}%` }}>
                                 <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity" />
                              </div>
                           </div>

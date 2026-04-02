@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-// Hardcoded URI for fast setup as requested
 const MONGODB_URI = "mongodb+srv://udaya1:udaya1@cluster0.ub6jv.mongodb.net/udaya-music-portfolio";
 
 let cached = (global as any).mongoose;

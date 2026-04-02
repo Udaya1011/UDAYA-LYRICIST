@@ -50,7 +50,6 @@ __turbopack_context__.s([
 ]);
 var __TURBOPACK__imported__module__$5b$externals$5d2f$mongoose__$5b$external$5d$__$28$mongoose$2c$__cjs$2c$__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$mongoose$29$__ = __turbopack_context__.i("[externals]/mongoose [external] (mongoose, cjs, [project]/UDAYA-LYRICIST/node_modules/mongoose)");
 ;
-// Hardcoded URI for fast setup as requested
 const MONGODB_URI = "mongodb+srv://udaya1:udaya1@cluster0.ub6jv.mongodb.net/udaya-music-portfolio";
 let cached = /*TURBOPACK member replacement*/ __turbopack_context__.g.mongoose;
 if (!cached) {
@@ -85,33 +84,20 @@ __turbopack_context__.s([
 ]);
 var __TURBOPACK__imported__module__$5b$externals$5d2f$mongoose__$5b$external$5d$__$28$mongoose$2c$__cjs$2c$__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$mongoose$29$__ = __turbopack_context__.i("[externals]/mongoose [external] (mongoose, cjs, [project]/UDAYA-LYRICIST/node_modules/mongoose)");
 ;
-const SongSchema = new __TURBOPACK__imported__module__$5b$externals$5d2f$mongoose__$5b$external$5d$__$28$mongoose$2c$__cjs$2c$__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$mongoose$29$__["Schema"]({
+const SongSchema = new __TURBOPACK__imported__module__$5b$externals$5d2f$mongoose__$5b$external$5d$__$28$mongoose$2c$__cjs$2c$__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$mongoose$29$__["default"].Schema({
     title: {
         type: String,
         required: true
     },
-    desc: {
-        type: String
-    },
-    lyrics: {
-        type: String
-    },
-    insta: {
-        type: String
-    },
-    file: {
-        type: String
-    },
-    thumb: {
-        type: String
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    }
+    desc: String,
+    lyrics: String,
+    insta: String,
+    file: String,
+    thumb: String
+}, {
+    timestamps: true
 });
-const Song = __TURBOPACK__imported__module__$5b$externals$5d2f$mongoose__$5b$external$5d$__$28$mongoose$2c$__cjs$2c$__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$mongoose$29$__["models"].Song || (0, __TURBOPACK__imported__module__$5b$externals$5d2f$mongoose__$5b$external$5d$__$28$mongoose$2c$__cjs$2c$__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$mongoose$29$__["model"])("Song", SongSchema);
-const __TURBOPACK__default__export__ = Song;
+const __TURBOPACK__default__export__ = __TURBOPACK__imported__module__$5b$externals$5d2f$mongoose__$5b$external$5d$__$28$mongoose$2c$__cjs$2c$__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$mongoose$29$__["default"].models.Song || __TURBOPACK__imported__module__$5b$externals$5d2f$mongoose__$5b$external$5d$__$28$mongoose$2c$__cjs$2c$__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$mongoose$29$__["default"].model("Song", SongSchema);
 }),
 "[project]/UDAYA-LYRICIST/src/app/api/songs/[id]/route.ts [app-route] (ecmascript)", ((__turbopack_context__) => {
 "use strict";

@@ -86,16 +86,9 @@ function AdminPage() {
                 fetchSongs();
             } else {
                 const rawText = await res.text();
-                console.log("Raw API Response:", rawText);
-                let errorData = {};
-                try {
-                    errorData = JSON.parse(rawText);
-                } catch (e) {}
-                console.error("API Error Response Data:", errorData);
                 alert(`Save Failed: ${rawText || "Check Server Logs"}`);
             }
         } catch (error) {
-            console.error("Fetch/Network Error:", error);
             alert("Network Error: Could not connect to Atlas.");
         }
     };
@@ -144,7 +137,6 @@ function AdminPage() {
             return;
         }
         if (confirm("Are you sure you want to delete this song from Atlas?")) {
-            console.log("Attempting to delete ID:", id);
             const previousSongs = [
                 ...songs
             ];
@@ -153,25 +145,14 @@ function AdminPage() {
                 const res = await fetch(`/api/songs/${id}`, {
                     method: "DELETE"
                 });
-                console.log("Delete Status:", res.status);
-                const rawText = await res.text();
-                console.log("Raw Delete Response:", rawText);
                 if (res.ok) {
-                    console.log("Delete confirmed on server.");
                     fetchSongs();
                 } else {
-                    let errorData = {
-                        error: "Unknown Error"
-                    };
-                    try {
-                        errorData = JSON.parse(rawText);
-                    } catch (e) {}
-                    console.error("Delete failed details:", errorData);
-                    alert(`Delete failed (Status ${res.status}): ${errorData.error || rawText}`);
+                    const rawText = await res.text();
+                    alert(`Delete failed (Status ${res.status}): ${rawText}`);
                     setSongs(previousSongs);
                 }
             } catch (err) {
-                console.error("Network error during delete:", err);
                 alert(`Network error: ${err.message}`);
                 setSongs(previousSongs);
             }
@@ -188,12 +169,12 @@ function AdminPage() {
                         size: 32
                     }, void 0, false, {
                         fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                        lineNumber: 165,
+                        lineNumber: 146,
                         columnNumber: 102
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                    lineNumber: 165,
+                    lineNumber: 146,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -208,13 +189,13 @@ function AdminPage() {
                                     children: "ADMIN"
                                 }, void 0, false, {
                                     fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                    lineNumber: 167,
+                                    lineNumber: 148,
                                     columnNumber: 108
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                            lineNumber: 167,
+                            lineNumber: 148,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -229,7 +210,7 @@ function AdminPage() {
                                     className: "w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white focus:border-cyan-400"
                                 }, void 0, false, {
                                     fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                    lineNumber: 169,
+                                    lineNumber: 150,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -240,7 +221,7 @@ function AdminPage() {
                                     className: "w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white focus:border-cyan-400"
                                 }, void 0, false, {
                                     fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                    lineNumber: 170,
+                                    lineNumber: 151,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -248,25 +229,25 @@ function AdminPage() {
                                     children: "Login"
                                 }, void 0, false, {
                                     fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                    lineNumber: 171,
+                                    lineNumber: 152,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                            lineNumber: 168,
+                            lineNumber: 149,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                    lineNumber: 166,
+                    lineNumber: 147,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-            lineNumber: 164,
+            lineNumber: 145,
             columnNumber: 7
         }, this);
     }
@@ -287,13 +268,13 @@ function AdminPage() {
                                     children: "DASHBOARD"
                                 }, void 0, false, {
                                     fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                    lineNumber: 182,
+                                    lineNumber: 163,
                                     columnNumber: 70
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                            lineNumber: 182,
+                            lineNumber: 163,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -302,13 +283,13 @@ function AdminPage() {
                             children: "LOGOUT"
                         }, void 0, false, {
                             fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                            lineNumber: 183,
+                            lineNumber: 164,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                    lineNumber: 181,
+                    lineNumber: 162,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -322,7 +303,7 @@ function AdminPage() {
                                     children: editingSongId ? "Edit Song" : "Add Song"
                                 }, void 0, false, {
                                     fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                    lineNumber: 188,
+                                    lineNumber: 169,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -340,7 +321,7 @@ function AdminPage() {
                                             className: "w-full bg-white/5 border border-white/10 rounded-lg p-2.5 text-sm"
                                         }, void 0, false, {
                                             fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                            lineNumber: 190,
+                                            lineNumber: 171,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -354,7 +335,7 @@ function AdminPage() {
                                             className: "w-full bg-white/5 border border-white/10 rounded-lg p-2.5 text-sm"
                                         }, void 0, false, {
                                             fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                            lineNumber: 191,
+                                            lineNumber: 172,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -362,10 +343,10 @@ function AdminPage() {
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
                                                     className: "text-[10px] font-black uppercase text-gray-500",
-                                                    children: "Thumbnail (URL or Upload)"
+                                                    children: "Thumbnail (Cloud URL or Upload)"
                                                 }, void 0, false, {
                                                     fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                                    lineNumber: 193,
+                                                    lineNumber: 175,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -382,7 +363,7 @@ function AdminPage() {
                                                             className: "flex-1 bg-white/5 border border-white/10 rounded-lg p-2.5 text-xs outline-none focus:border-cyan-400"
                                                         }, void 0, false, {
                                                             fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                                            lineNumber: 195,
+                                                            lineNumber: 177,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
@@ -392,7 +373,7 @@ function AdminPage() {
                                                                     size: 14
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                                                    lineNumber: 197,
+                                                                    lineNumber: 179,
                                                                     columnNumber: 21
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -402,25 +383,25 @@ function AdminPage() {
                                                                     className: "hidden"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                                                    lineNumber: 198,
+                                                                    lineNumber: 180,
                                                                     columnNumber: 21
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                                            lineNumber: 196,
+                                                            lineNumber: 178,
                                                             columnNumber: 19
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                                    lineNumber: 194,
+                                                    lineNumber: 176,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                            lineNumber: 192,
+                                            lineNumber: 174,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -428,10 +409,10 @@ function AdminPage() {
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
                                                     className: "text-[10px] font-black uppercase text-gray-500",
-                                                    children: "Audio (Filename or Upload)"
+                                                    children: "Audio (Cloud URL or Upload)"
                                                 }, void 0, false, {
                                                     fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                                    lineNumber: 204,
+                                                    lineNumber: 186,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -448,7 +429,7 @@ function AdminPage() {
                                                             className: "flex-1 bg-white/5 border border-white/10 rounded-lg p-2.5 text-xs outline-none focus:border-purple-400"
                                                         }, void 0, false, {
                                                             fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                                            lineNumber: 206,
+                                                            lineNumber: 188,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
@@ -458,7 +439,7 @@ function AdminPage() {
                                                                     size: 14
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                                                    lineNumber: 208,
+                                                                    lineNumber: 190,
                                                                     columnNumber: 21
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -468,25 +449,25 @@ function AdminPage() {
                                                                     className: "hidden"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                                                    lineNumber: 209,
+                                                                    lineNumber: 191,
                                                                     columnNumber: 21
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                                            lineNumber: 207,
+                                                            lineNumber: 189,
                                                             columnNumber: 19
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                                    lineNumber: 205,
+                                                    lineNumber: 187,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                            lineNumber: 203,
+                                            lineNumber: 185,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -500,7 +481,7 @@ function AdminPage() {
                                             className: "w-full bg-white/5 border border-white/10 rounded-lg p-2.5 text-sm"
                                         }, void 0, false, {
                                             fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                            lineNumber: 213,
+                                            lineNumber: 196,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -514,7 +495,7 @@ function AdminPage() {
                                             className: "w-full bg-white/5 border border-white/10 rounded-lg p-2.5 text-sm resize-none"
                                         }, void 0, false, {
                                             fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                            lineNumber: 214,
+                                            lineNumber: 197,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -523,39 +504,19 @@ function AdminPage() {
                                             children: isUploading ? "Uploading..." : editingSongId ? "Update" : "Save"
                                         }, void 0, false, {
                                             fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                            lineNumber: 215,
+                                            lineNumber: 198,
                                             columnNumber: 15
-                                        }, this),
-                                        editingSongId && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                            type: "button",
-                                            onClick: ()=>{
-                                                setEditingSongId(null);
-                                                setNewSong({
-                                                    title: "",
-                                                    desc: "",
-                                                    lyrics: "",
-                                                    insta: "",
-                                                    file: "",
-                                                    thumb: ""
-                                                });
-                                            },
-                                            className: "w-full text-xs text-red-500 mt-2 uppercase underline",
-                                            children: "Cancel"
-                                        }, void 0, false, {
-                                            fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                            lineNumber: 221,
-                                            columnNumber: 33
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                    lineNumber: 189,
+                                    lineNumber: 170,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                            lineNumber: 187,
+                            lineNumber: 168,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -566,17 +527,17 @@ function AdminPage() {
                                     children: "SONG LIST"
                                 }, void 0, false, {
                                     fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                    lineNumber: 226,
+                                    lineNumber: 208,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "space-y-4",
+                                    className: "space-y-4 text-white",
                                     children: isLoading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: "text-center py-20 text-gray-500 uppercase tracking-widest animate-pulse",
                                         children: "Connecting to Atlas..."
                                     }, void 0, false, {
                                         fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                        lineNumber: 228,
+                                        lineNumber: 210,
                                         columnNumber: 28
                                     }, this) : songs.map((song)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "bg-white/5 border border-white/10 p-4 rounded-2xl flex justify-between items-center hover:bg-white/10",
@@ -588,38 +549,31 @@ function AdminPage() {
                                                             className: "w-12 h-12 bg-cyan-500/20 rounded-lg overflow-hidden",
                                                             children: song.thumb ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
                                                                 src: song.thumb.match(/^(http|\/|data:)/) ? song.thumb : `/${song.thumb}`,
-                                                                className: "w-full h-full object-cover",
-                                                                onError: (e)=>{
-                                                                    // If it fails with root, try common folders as fallback
-                                                                    const target = e.target;
-                                                                    if (!target.src.includes('/images/')) {
-                                                                        target.src = `/images/${song.thumb}`;
-                                                                    }
-                                                                }
+                                                                className: "w-full h-full object-cover"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                                                lineNumber: 234,
+                                                                lineNumber: 216,
                                                                 columnNumber: 27
                                                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$music$2d$2$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Music2$3e$__["Music2"], {
                                                                 className: "text-cyan-400"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                                                lineNumber: 245,
+                                                                lineNumber: 220,
                                                                 columnNumber: 29
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                                            lineNumber: 232,
+                                                            lineNumber: 214,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                             children: [
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
-                                                                    className: "font-bold text-white",
+                                                                    className: "font-bold",
                                                                     children: song.title
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                                                    lineNumber: 248,
+                                                                    lineNumber: 223,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -627,19 +581,19 @@ function AdminPage() {
                                                                     children: song.desc
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                                                    lineNumber: 249,
+                                                                    lineNumber: 224,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                                            lineNumber: 247,
+                                                            lineNumber: 222,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                                    lineNumber: 231,
+                                                    lineNumber: 213,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -651,7 +605,7 @@ function AdminPage() {
                                                             children: "EDIT"
                                                         }, void 0, false, {
                                                             fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                                            lineNumber: 253,
+                                                            lineNumber: 228,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -661,52 +615,52 @@ function AdminPage() {
                                                                 size: 18
                                                             }, void 0, false, {
                                                                 fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                                                lineNumber: 254,
+                                                                lineNumber: 229,
                                                                 columnNumber: 95
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                                            lineNumber: 254,
+                                                            lineNumber: 229,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                                    lineNumber: 252,
+                                                    lineNumber: 227,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, song._id, true, {
                                             fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                            lineNumber: 230,
+                                            lineNumber: 212,
                                             columnNumber: 19
                                         }, this))
                                 }, void 0, false, {
                                     fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                                    lineNumber: 227,
+                                    lineNumber: 209,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                            lineNumber: 225,
+                            lineNumber: 207,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-                    lineNumber: 186,
+                    lineNumber: 167,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-            lineNumber: 180,
+            lineNumber: 161,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/UDAYA-LYRICIST/src/app/admin/page.tsx",
-        lineNumber: 179,
+        lineNumber: 160,
         columnNumber: 5
     }, this);
 }

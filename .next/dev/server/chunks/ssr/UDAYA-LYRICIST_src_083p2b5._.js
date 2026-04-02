@@ -873,15 +873,15 @@ function Works() {
                 });
                 const data = await res.json();
                 const mapped = data.map((s)=>{
-                    const resovlePath = (val, prefix)=>{
+                    const resovlePath = (val)=>{
                         if (!val) return null;
                         if (val.match(/^(http|\/|data:)/)) return val;
-                        return `/${val}`; // Try root first
+                        return `/${val}`;
                     };
                     return {
                         ...s,
-                        audioPath: resovlePath(s.file, 'songs'),
-                        thumbPath: resovlePath(s.thumb, 'images') || "https://images.unsplash.com/photo-1514525253361-bee8718a300a?auto=format&fit=crop&q=80&w=400"
+                        audioPath: resovlePath(s.file),
+                        thumbPath: resovlePath(s.thumb) || "https://images.unsplash.com/photo-1514525253361-bee8718a300a?auto=format&fit=crop&q=80&w=400"
                     };
                 });
                 setSongs(mapped);
@@ -915,15 +915,8 @@ function Works() {
         if (!selected) {
             setIsPlaying(false);
             if (audioRef.current) audioRef.current.pause();
-            const url = new URL(window.location.href);
-            url.searchParams.delete("song");
-            url.searchParams.delete("play");
-            window.history.replaceState({}, "", url.pathname);
         } else {
             setHasAudio(!!selected.audioPath);
-            const url = new URL(window.location.href);
-            url.searchParams.set("song", selected._id);
-            window.history.replaceState({}, "", url.toString());
         }
     }, [
         selected
@@ -934,10 +927,8 @@ function Works() {
             audioRef.current.pause();
             setIsPlaying(false);
         } else {
-            // Catch playback errors (like unsupported source)
             audioRef.current.play().then(()=>setIsPlaying(true)).catch((err)=>{
-                console.error("Playback Error:", err);
-                alert("Audio file not found or unsupported format. Please check your file name in the Admin panel.");
+                alert("Audio file not found or unsupported format.");
                 setIsPlaying(false);
             });
         }
@@ -975,14 +966,14 @@ function Works() {
                 className: "hidden"
             }, selected._id, false, {
                 fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                lineNumber: 121,
+                lineNumber: 112,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "container mx-auto px-6 relative z-10",
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "text-center mb-20 uppercase tracking-tighter",
+                        className: "text-center mb-20 uppercase tracking-tighter text-white",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].h2, {
                                 className: "text-5xl md:text-7xl font-black mb-4",
@@ -993,31 +984,31 @@ function Works() {
                                         children: "SONGS"
                                     }, void 0, false, {
                                         fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                                        lineNumber: 135,
+                                        lineNumber: 126,
                                         columnNumber: 78
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                                lineNumber: 135,
+                                lineNumber: 126,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "w-24 h-1.5 bg-cyan-400 mx-auto rounded-full mb-6"
                             }, void 0, false, {
                                 fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                                lineNumber: 136,
+                                lineNumber: 127,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                        lineNumber: 134,
+                        lineNumber: 125,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8",
-                        children: songs.map((work, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
+                        children: songs.map((work)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
                                 className: "group cursor-pointer",
                                 onClick: ()=>setSelected(work),
                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1032,7 +1023,7 @@ function Works() {
                                                     className: "w-full h-full object-cover transition-all group-hover:scale-110"
                                                 }, void 0, false, {
                                                     fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                                                    lineNumber: 144,
+                                                    lineNumber: 135,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1043,34 +1034,34 @@ function Works() {
                                                             fill: "black"
                                                         }, void 0, false, {
                                                             fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                                                            lineNumber: 146,
+                                                            lineNumber: 137,
                                                             columnNumber: 108
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                                                        lineNumber: 146,
+                                                        lineNumber: 137,
                                                         columnNumber: 22
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                                                    lineNumber: 145,
+                                                    lineNumber: 136,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                                            lineNumber: 143,
+                                            lineNumber: 134,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "p-6 text-center",
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                                    className: "text-2xl font-black text-white group-hover:text-cyan-400 transition-colors",
+                                                    className: "text-2xl font-black text-white group-hover:text-cyan-400 transition-colors uppercase tracking-tight",
                                                     children: work.title
                                                 }, void 0, false, {
                                                     fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                                                    lineNumber: 150,
+                                                    lineNumber: 141,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1078,35 +1069,35 @@ function Works() {
                                                     children: work.desc
                                                 }, void 0, false, {
                                                     fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                                                    lineNumber: 151,
+                                                    lineNumber: 142,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                                            lineNumber: 149,
+                                            lineNumber: 140,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                                    lineNumber: 142,
+                                    lineNumber: 133,
                                     columnNumber: 15
                                 }, this)
                             }, work._id, false, {
                                 fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                                lineNumber: 141,
+                                lineNumber: 132,
                                 columnNumber: 13
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                        lineNumber: 139,
+                        lineNumber: 130,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                lineNumber: 133,
+                lineNumber: 124,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$AnimatePresence$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AnimatePresence"], {
@@ -1127,7 +1118,7 @@ function Works() {
                             onClick: ()=>setSelected(null)
                         }, void 0, false, {
                             fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                            lineNumber: 162,
+                            lineNumber: 153,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -1148,16 +1139,16 @@ function Works() {
                                         size: 32
                                     }, void 0, false, {
                                         fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                                        lineNumber: 164,
+                                        lineNumber: 155,
                                         columnNumber: 123
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                                    lineNumber: 164,
+                                    lineNumber: 155,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "flex flex-col md:flex-row gap-12",
+                                    className: "flex flex-col md:flex-row gap-12 text-white",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "md:w-1/2 space-y-8",
@@ -1165,11 +1156,11 @@ function Works() {
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     children: [
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                                            className: "text-3xl md:text-5xl font-black mb-4 uppercase tracking-tighter text-white",
+                                                            className: "text-3xl md:text-5xl font-black mb-4 uppercase tracking-tighter",
                                                             children: selected.title
                                                         }, void 0, false, {
                                                             fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                                                            lineNumber: 168,
+                                                            lineNumber: 159,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1177,13 +1168,13 @@ function Works() {
                                                             children: selected.desc
                                                         }, void 0, false, {
                                                             fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                                                            lineNumber: 169,
+                                                            lineNumber: 160,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                                                    lineNumber: 167,
+                                                    lineNumber: 158,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1194,7 +1185,7 @@ function Works() {
                                                             children: "TAMIL LYRICS"
                                                         }, void 0, false, {
                                                             fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                                                            lineNumber: 172,
+                                                            lineNumber: 163,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("pre", {
@@ -1202,19 +1193,19 @@ function Works() {
                                                             children: selected.lyrics
                                                         }, void 0, false, {
                                                             fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                                                            lineNumber: 173,
+                                                            lineNumber: 164,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                                                    lineNumber: 171,
+                                                    lineNumber: 162,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                                            lineNumber: 166,
+                                            lineNumber: 157,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1225,7 +1216,7 @@ function Works() {
                                                     className: "w-full h-[250px] object-cover rounded-2xl border border-white/10"
                                                 }, void 0, false, {
                                                     fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                                                    lineNumber: 177,
+                                                    lineNumber: 168,
                                                     columnNumber: 20
                                                 }, this),
                                                 selected.audioPath && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1239,7 +1230,7 @@ function Works() {
                                                                 size: 28
                                                             }, void 0, false, {
                                                                 fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                                                                lineNumber: 181,
+                                                                lineNumber: 172,
                                                                 columnNumber: 40
                                                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$play$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Play$3e$__["Play"], {
                                                                 fill: "black",
@@ -1247,12 +1238,12 @@ function Works() {
                                                                 className: "ml-1"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                                                                lineNumber: 181,
+                                                                lineNumber: 172,
                                                                 columnNumber: 75
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                                                            lineNumber: 180,
+                                                            lineNumber: 171,
                                                             columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1266,7 +1257,7 @@ function Works() {
                                                                             children: "Listen Now"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                                                                            lineNumber: 185,
+                                                                            lineNumber: 176,
                                                                             columnNumber: 30
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1278,13 +1269,13 @@ function Works() {
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                                                                            lineNumber: 186,
+                                                                            lineNumber: 177,
                                                                             columnNumber: 30
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                                                                    lineNumber: 184,
+                                                                    lineNumber: 175,
                                                                     columnNumber: 27
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1299,29 +1290,29 @@ function Works() {
                                                                             className: "absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                                                                            lineNumber: 196,
+                                                                            lineNumber: 181,
                                                                             columnNumber: 33
                                                                         }, this)
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                                                                        lineNumber: 192,
+                                                                        lineNumber: 180,
                                                                         columnNumber: 30
                                                                     }, this)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                                                                    lineNumber: 188,
+                                                                    lineNumber: 179,
                                                                     columnNumber: 27
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                                                            lineNumber: 183,
+                                                            lineNumber: 174,
                                                             columnNumber: 25
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                                                    lineNumber: 179,
+                                                    lineNumber: 170,
                                                     columnNumber: 22
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$UDAYA$2d$LYRICIST$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
@@ -1331,42 +1322,42 @@ function Works() {
                                                     children: "Open In Instagram"
                                                 }, void 0, false, {
                                                     fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                                                    lineNumber: 202,
+                                                    lineNumber: 187,
                                                     columnNumber: 20
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                                            lineNumber: 176,
+                                            lineNumber: 167,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                                    lineNumber: 165,
+                                    lineNumber: 156,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                            lineNumber: 163,
+                            lineNumber: 154,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                    lineNumber: 161,
+                    lineNumber: 152,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-                lineNumber: 159,
+                lineNumber: 150,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/UDAYA-LYRICIST/src/components/Works.tsx",
-        lineNumber: 119,
+        lineNumber: 110,
         columnNumber: 5
     }, this);
 }

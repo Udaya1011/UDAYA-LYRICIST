@@ -1,15 +1,12 @@
-import mongoose, { Schema, model, models } from "mongoose";
+import mongoose from "mongoose";
 
-const SongSchema = new Schema({
+const SongSchema = new mongoose.Schema({
   title: { type: String, required: true },
-  desc: { type: String },
-  lyrics: { type: String },
-  insta: { type: String },
-  file: { type: String },
-  thumb: { type: String },
-  createdAt: { type: Date, default: Date.now }
-});
+  desc: String,
+  lyrics: String,
+  insta: String,
+  file: String,
+  thumb: String,
+}, { timestamps: true });
 
-const Song = models.Song || model("Song", SongSchema);
-
-export default Song;
+export default mongoose.models.Song || mongoose.model("Song", SongSchema);
