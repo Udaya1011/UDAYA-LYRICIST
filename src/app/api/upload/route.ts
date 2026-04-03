@@ -3,13 +3,42 @@ import { v2 as cloudinary } from "cloudinary";
 import { writeFile, mkdir } from "fs/promises";
 import { join } from "path";
 
-// 1. Configure Cloudinary (it will automatically search for process.env.CLOUDINARY_URL)
-cloudinary.config({
-  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-  secure: true,
-});
+// 1. Configure Cloudinary
+const configureCloudinary = () => {
+  const url = process.env.CLOUDINARY_URL;
+  
+  if (url && url.startsWith('cloudinary://')) {
+    console.log("CONFIGURING CLOUDINARY VIA URL...");
+    // Manual parsing as a fallback for the SDK's auto-config
+    try {
+      const parts = url.replace('cloudinary://', '').split('@');
+      const credentials = parts[0].split(':');
+      const cloudName = parts[1];
+      
+      cloudinary.config({
+        cloud_name: cloudName,
+        api_key: credentials[0],
+        api_secret: credentials[1],
+        secure: true,
+      });
+      console.log("CLOUDINARY MANUAL CONFIG SUCCESS. Cloud Name:", cloudName);
+    } catch (e) {
+      console.error("FAILED TO MANUALLY PARSE CLOUDINARY_URL:", e);
+      // Fallback to let SDK handle it
+      cloudinary.config({ secure: true });
+    }
+  } else {
+    console.log("CONFIGURING CLOUDINARY VIA INDIVIDUAL ENVS...");
+    cloudinary.config({
+      cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+      api_key: process.env.CLOUDINARY_API_KEY,
+      api_secret: process.env.CLOUDINARY_API_SECRET,
+      secure: true,
+    });
+  }
+};
+
+configureCloudinary();
 
 export async function POST(request: Request) {
   try {
@@ -27,12 +56,18 @@ export async function POST(request: Request) {
     const useCloudinary = !!(process.env.CLOUDINARY_API_KEY || process.env.CLOUDINARY_URL);
 
     if (useCloudinary) {
+      // Runtime check for config
+      if (!cloudinary.config().api_key) {
+        console.log("RECONFIGURING CLOUDINARY AT RUNTIME...");
+        configureCloudinary();
+      }
+
       console.log("UPLOADING TO CLOUDINARY...");
       const fileBase64 = `data:${file.type};base64,${buffer.toString("base64")}`;
       const result = await cloudinary.uploader.upload(fileBase64, {
         resource_type: "auto",
         folder: "udaya-works",
-        public_id: file.name.split('.')[0].replace(/\s+/g, '_'),
+        public_id: file.name.split('.')[0].replace(/\s+/g, '_') + '_' + Date.now(),
       });
       console.log("CLOUDINARY UPLOAD SUCCESS:", result.secure_url);
       return NextResponse.json({ success: true, filename: result.secure_url, path: result.secure_url });
