@@ -77,7 +77,7 @@ export default function Home() {
       <audio 
         ref={audioRef} 
         loop 
-        src="/songs/IRUTTU VAZHLKAIYE (mp3cut.net) (1).mp3.mpeg" 
+        src="/songs/iruttu-vazhlkaiye.mp3" 
       />
     </main>
   );
