@@ -226,16 +226,24 @@ export default function AdminPage() {
                 songs.map((song) => (
                   <div key={song._id} className="bg-white/5 border border-white/10 p-4 rounded-2xl flex justify-between items-center hover:bg-white/10">
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-cyan-500/20 rounded-lg overflow-hidden">
+                      <div className="w-12 h-12 bg-cyan-500/20 rounded-lg overflow-hidden relative">
                         {song.thumb ? (
                           <img 
                             src={song.thumb.match(/^(http|\/|data:)/) ? song.thumb : `/${song.thumb}`} 
                             className="w-full h-full object-cover"
                           />
                         ) : <Music2 className="text-cyan-400" />}
+                        
+                        {/* Status Badge on Item */}
+                        <div className={`absolute top-0 right-0 w-2 h-2 rounded-full ${song.file?.startsWith('http') ? 'bg-cyan-400' : 'bg-orange-500'}`} />
                       </div>
                       <div>
-                        <h4 className="font-bold">{song.title}</h4>
+                        <div className="flex items-center gap-2">
+                           <h4 className="font-bold">{song.title}</h4>
+                           <span className={`text-[8px] px-1.5 py-0.5 rounded font-black uppercase ${song.file?.startsWith('http') ? 'bg-cyan-500/20 text-cyan-400' : 'bg-orange-500/20 text-orange-400'}`}>
+                             {song.file?.startsWith('http') ? 'Cloud' : 'Local'}
+                           </span>
+                        </div>
                         <p className="text-xs text-gray-500">{song.desc}</p>
                       </div>
                     </div>
