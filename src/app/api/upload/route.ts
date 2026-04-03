@@ -28,23 +28,23 @@ export async function POST(request: Request) {
 
     if (useCloudinary) {
       console.log("UPLOADING TO CLOUDINARY...");
-      
       const fileBase64 = `data:${file.type};base64,${buffer.toString("base64")}`;
-      
       const result = await cloudinary.uploader.upload(fileBase64, {
         resource_type: "auto",
         folder: "udaya-works",
         public_id: file.name.split('.')[0].replace(/\s+/g, '_'),
       });
-
       console.log("CLOUDINARY UPLOAD SUCCESS:", result.secure_url);
-
-      return NextResponse.json({ 
-          success: true, 
-          filename: result.secure_url,
-          path: result.secure_url 
-      });
+      return NextResponse.json({ success: true, filename: result.secure_url, path: result.secure_url });
     } else {
+      // PROHIBIT LOCAL STORAGE ON PRODUCTION (RENDER)
+      if (process.env.NODE_ENV === "production") {
+        return NextResponse.json({ 
+          success: false, 
+          error: "CRITICAL: Cloudinary (CLOUDINARY_URL) not set on Render. Local uploads are NOT allowed in production to prevent data loss." 
+        }, { status: 403 });
+      }
+
       console.log("UPLOADING TO LOCAL FS (Development Only)...");
       const safeName = file.name.replace(/\s+/g, '_').toLowerCase();
       const publicDir = join(process.cwd(), "public");

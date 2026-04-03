@@ -166,15 +166,46 @@ export default function AdminPage() {
           </div>
           
           {/* Storage Status Banner */}
-          <div className={`p-3 rounded-xl border flex items-center justify-between transition-all ${songs.length > 0 ? (songs[0].file?.startsWith('http') ? 'bg-cyan-500/10 border-cyan-500/30 text-cyan-400' : 'bg-orange-500/10 border-orange-500/30 text-orange-400') : 'bg-white/5 border-white/10 text-gray-400'}`}>
-             <div className="flex items-center gap-3">
-               <div className={`w-2 h-2 rounded-full animate-pulse ${songs.length > 0 ? (songs[0].file?.startsWith('http') ? 'bg-cyan-400' : 'bg-orange-400') : 'bg-gray-400'}`} />
-               <span className="text-xs font-black uppercase tracking-widest">
-                 Storage Status: {songs.length > 0 ? (songs[0].file?.startsWith('http') ? 'Cloud (Permanent - Render Ready)' : 'Local (Temporary - WILL BE DELETED ON RENDER)') : 'Connecting...'}
-               </span>
+          <div className="space-y-4">
+             <div className={`p-4 rounded-xl border flex flex-col md:flex-row items-center justify-between gap-4 transition-all ${songs.length > 0 ? (songs[0].file?.startsWith('http') ? 'bg-cyan-500/10 border-cyan-500/30 text-cyan-400' : 'bg-red-500/20 border-red-500/50 text-red-500 animate-pulse') : 'bg-white/5 border-white/10 text-gray-400'}`}>
+                <div className="flex items-center gap-3">
+                  <div className={`w-3 h-3 rounded-full ${songs.length > 0 ? (songs[0].file?.startsWith('http') ? 'bg-cyan-400' : 'bg-red-500 shadow-[0_0_15px_red]') : 'bg-gray-400'}`} />
+                  <div className="flex flex-col">
+                    <span className="text-sm font-black uppercase tracking-widest">
+                      STORAGE STATUS: {songs.length > 0 ? (songs[0].file?.startsWith('http') ? 'Permanent (Cloudinary)' : 'CRITICAL (LOCAL STORAGE)') : 'CONNECTING...'}
+                    </span>
+                    {songs.length > 0 && !songs[0].file?.startsWith('http') && (
+                      <span className="text-[10px] font-bold">New uploads will be lost when Render restarts! Please connect Cloudinary.</span>
+                    )}
+                  </div>
+                </div>
+                {songs.length > 0 && !songs[0].file?.startsWith('http') && (
+                  <div className="flex items-center gap-2">
+                     <span className="text-xs font-black uppercase">ACTION REQUIRED:</span>
+                     <span className="bg-red-500 text-white px-2 py-1 rounded text-[10px] font-black">ADD CLOUDINARY_URL TO RENDER</span>
+                  </div>
+                )}
              </div>
+
+             {/* Setup Guide for Cloudinary */}
              {songs.length > 0 && !songs[0].file?.startsWith('http') && (
-               <span className="text-[10px] font-bold underline">Add CLOUDINARY_URL to Render and refresh to fix!</span>
+               <div className="bg-white/5 border border-white/10 p-6 rounded-2xl space-y-4">
+                 <h3 className="text-sm font-black uppercase text-gray-400">How to Fix Permanently 🚀</h3>
+                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-[11px] font-medium leading-relaxed">
+                   <div className="bg-black/40 p-4 rounded-xl border border-white/5">
+                      <p className="text-cyan-400 mb-1">STEP 1</p>
+                      <p>Create free account at <strong>Cloudinary.com</strong></p>
+                   </div>
+                   <div className="bg-black/40 p-4 rounded-xl border border-white/5">
+                      <p className="text-cyan-400 mb-1">STEP 2</p>
+                      <p>Copy <strong>API Environment variable</strong> (starts with cloudinary://)</p>
+                   </div>
+                   <div className="bg-black/40 p-4 rounded-xl border border-white/5">
+                      <p className="text-cyan-400 mb-1">STEP 3</p>
+                      <p>Add <strong>CLOUDINARY_URL</strong> to Render.com Environment Variable settings</p>
+                   </div>
+                 </div>
+               </div>
              )}
           </div>
         </header>
