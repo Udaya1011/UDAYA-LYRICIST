@@ -216,10 +216,10 @@ export default function AdminPage() {
               <div className="space-y-1">
                 <label className="text-[10px] font-black uppercase text-gray-500">Audio (Cloud URL or Upload)</label>
                 <div className="flex gap-2">
-                  <input type="text" value={newSong.file} onChange={(e)=>setNewSong({...newSong, file:e.target.value})} placeholder="song.mpeg" className="flex-1 bg-white/5 border border-white/10 rounded-lg p-2.5 text-xs outline-none focus:border-purple-400" />
+                  <input type="text" value={newSong.file} onChange={(e)=>setNewSong({...newSong, file:e.target.value})} placeholder="song.mp3 or video.mp4" className="flex-1 bg-white/5 border border-white/10 rounded-lg p-2.5 text-xs outline-none focus:border-purple-400" />
                   <label className="bg-purple-500/20 text-purple-400 border border-purple-500/30 px-3 flex items-center rounded-lg cursor-pointer hover:bg-purple-500/30">
                     <Music size={14}/>
-                    <input type="file" accept="audio/*" onChange={(e)=>handleFileChange(e, "file")} className="hidden" />
+                    <input type="file" accept="audio/*,video/*" onChange={(e)=>handleFileChange(e, "file")} className="hidden" />
                   </label>
                 </div>
               </div>

@@ -11,7 +11,7 @@ export default function Works({ onPlayStateChange }: { onPlayStateChange?: (play
   const [hasAudio, setHasAudio] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const mediaRef = useRef<HTMLMediaElement | null>(null);
 
   useEffect(() => {
     const fetchSongs = async () => {
@@ -48,8 +48,8 @@ export default function Works({ onPlayStateChange }: { onPlayStateChange?: (play
         setSelected(work);
         if (autoPlay && work.audioPath) {
           setTimeout(() => {
-            if (audioRef.current) {
-              audioRef.current.play()
+            if (mediaRef.current) {
+              mediaRef.current.play()
                 .then(() => setIsPlaying(true))
                 .catch(() => {});
             }
@@ -62,7 +62,7 @@ export default function Works({ onPlayStateChange }: { onPlayStateChange?: (play
   useEffect(() => {
     if (!selected) {
       setIsPlaying(false);
-      if (audioRef.current) audioRef.current.pause();
+      if (mediaRef.current) mediaRef.current.pause();
     } else {
       setHasAudio(!!selected.audioPath);
     }
@@ -73,33 +73,33 @@ export default function Works({ onPlayStateChange }: { onPlayStateChange?: (play
   }, [isPlaying, onPlayStateChange]);
 
   const togglePlay = () => {
-    if (!audioRef.current || !hasAudio) return;
+    if (!mediaRef.current || !hasAudio) return;
     
     if (isPlaying) {
-      audioRef.current.pause();
+      mediaRef.current.pause();
       setIsPlaying(false);
     } else {
-      audioRef.current.play()
+      mediaRef.current.play()
         .then(() => setIsPlaying(true))
         .catch((err) => {
-          alert("Audio file not found or unsupported format.");
+          console.error("Playback Error:", err);
           setIsPlaying(false);
         });
     }
   };
 
   const handleTimeUpdate = () => {
-    if (audioRef.current) {
-      setCurrentTime(audioRef.current.currentTime);
-      setDuration(audioRef.current.duration || 0);
+    if (mediaRef.current) {
+      setCurrentTime(mediaRef.current.currentTime);
+      setDuration(mediaRef.current.duration || 0);
     }
   };
 
   const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (audioRef.current && duration) {
+    if (mediaRef.current && duration) {
        const rect = e.currentTarget.getBoundingClientRect();
        const percent = (e.clientX - rect.left) / rect.width;
-       audioRef.current.currentTime = percent * duration;
+       mediaRef.current.currentTime = percent * duration;
     }
   };
 
@@ -113,15 +113,16 @@ export default function Works({ onPlayStateChange }: { onPlayStateChange?: (play
   return (
     <section id="works" className="py-24 relative overflow-hidden bg-black/50">
       {selected?.audioPath && (
-        <audio 
+        <video 
           key={selected._id}
-          ref={audioRef}
+          ref={mediaRef as any}
           src={selected.audioPath}
-          preload="none"
+          preload="auto"
           onTimeUpdate={handleTimeUpdate}
           onLoadedMetadata={handleTimeUpdate}
           onEnded={() => setIsPlaying(false)}
           className="hidden"
+          playsInline
         />
       )}
 
@@ -168,8 +169,27 @@ export default function Works({ onPlayStateChange }: { onPlayStateChange?: (play
                     <pre className="text-gray-300 whitespace-pre-line leading-relaxed italic bg-white/5 p-6 rounded-2xl max-h-[300px] overflow-y-auto custom-scrollbar">{selected.lyrics}</pre>
                   </div>
                 </div>
-                <div className="md:w-1/2 space-y-8 flex flex-col justify-end">
-                   <img src={selected.thumbPath} className="w-full h-[250px] object-cover rounded-2xl border border-white/10" />
+                <div className="md:w-1/2 space-y-8 flex flex-col justify-center">
+                   <div className="relative aspect-video rounded-2xl overflow-hidden border border-white/10 bg-black">
+                      {selected.audioPath?.match(/\.(mp4|webm|mov|m4v)$/i) ? (
+                        <video 
+                           src={selected.audioPath} 
+                           className="w-full h-full object-cover" 
+                           autoPlay={isPlaying}
+                           muted={!isPlaying}
+                           playsInline
+                           onClick={togglePlay}
+                        />
+                      ) : (
+                        <img src={selected.thumbPath} className="w-full h-full object-cover" />
+                      )}
+                      
+                      {!isPlaying && !selected.audioPath?.match(/\.(mp4|webm|mov|m4v)$/i) && (
+                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center pointer-events-none">
+                           <Play size={48} className="text-cyan-400 opacity-50" />
+                        </div>
+                      )}
+                   </div>
                    {selected.audioPath && (
                      <div className="bg-white/5 p-6 rounded-2xl flex items-center gap-6 border border-white/10">
                         <button onClick={togglePlay} className="w-16 h-16 bg-cyan-500 rounded-full flex items-center justify-center text-black">
