@@ -11,7 +11,7 @@ export default function Works({ onPlayStateChange }: { onPlayStateChange?: (play
   const [hasAudio, setHasAudio] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const mediaRef = useRef<HTMLMediaElement | null>(null);
+  const mediaRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
     const fetchSongs = async () => {
@@ -161,7 +161,7 @@ export default function Works({ onPlayStateChange }: { onPlayStateChange?: (play
                    <div className="relative aspect-video rounded-2xl overflow-hidden border border-white/10 bg-black group shadow-3xl">
                       <video 
                         key={selected._id}
-                        ref={mediaRef}
+                        ref={mediaRef as any}
                         src={selected.audioPath}
                         poster={selected.thumbPath}
                         onTimeUpdate={handleTimeUpdate}
