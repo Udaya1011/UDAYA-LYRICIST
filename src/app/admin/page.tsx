@@ -188,6 +188,22 @@ export default function AdminPage() {
               
               <div className="space-y-1">
                 <label className="text-[10px] font-black uppercase text-gray-500">Thumbnail (Cloud URL or Upload)</label>
+                {newSong.thumb && (
+                  <div className="mb-2 relative w-full h-32 rounded-lg overflow-hidden border border-white/10">
+                    <img 
+                      src={newSong.thumb.match(/^(http|\/|data:)/) ? newSong.thumb : `/${newSong.thumb}`} 
+                      className="w-full h-full object-cover" 
+                      alt="Preview"
+                    />
+                    <button 
+                      type="button"
+                      onClick={() => setNewSong({...newSong, thumb: ""})}
+                      className="absolute top-1 right-1 bg-black/60 p-1 rounded-full text-white hover:text-red-400"
+                    >
+                      <X size={14} />
+                    </button>
+                  </div>
+                )}
                 <div className="flex gap-2">
                   <input type="text" value={newSong.thumb} onChange={(e)=>setNewSong({...newSong, thumb:e.target.value})} placeholder="cover.jpg" className="flex-1 bg-white/5 border border-white/10 rounded-lg p-2.5 text-xs outline-none focus:border-cyan-400" />
                   <label className="bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 px-3 flex items-center rounded-lg cursor-pointer hover:bg-cyan-500/30">
