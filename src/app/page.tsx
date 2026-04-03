@@ -19,19 +19,20 @@ export default function Home() {
   });
 
   const [isMuted, setIsMuted] = useState(true);
+  const [isBgMusicPausedByOther, setIsBgMusicPausedByOther] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     // Hidden Background Music (Optional, needs user interaction to start)
     if (audioRef.current) {
-      audioRef.current.volume = 0.3;
-      if (!isMuted) {
+      audioRef.current.volume = 1.0;
+      if (!isMuted && !isBgMusicPausedByOther) {
         audioRef.current.play().catch(() => setIsMuted(true));
       } else {
         audioRef.current.pause();
       }
     }
-  }, [isMuted]);
+  }, [isMuted, isBgMusicPausedByOther]);
 
   return (
     <main className="relative min-h-screen bg-[#05050a] text-white selection:bg-cyan-400 selection:text-black">
@@ -50,7 +51,7 @@ export default function Home() {
       </motion.div>
 
       <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
-        <Works />
+        <Works onPlayStateChange={(playing) => setIsBgMusicPausedByOther(playing)} />
       </motion.div>
 
       <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
@@ -76,7 +77,7 @@ export default function Home() {
       <audio 
         ref={audioRef} 
         loop 
-        src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" 
+        src="/songs/IRUTTU VAZHLKAIYE (mp3cut.net) (1).mp3.mpeg" 
       />
     </main>
   );

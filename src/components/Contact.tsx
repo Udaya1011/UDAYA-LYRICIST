@@ -171,7 +171,7 @@ export default function Contact() {
            whileInView={{ opacity: 1 }}
            className="mt-20 pt-10 border-t border-white/5 text-center flex flex-col md:flex-row justify-between items-center text-gray-500 font-bold tracking-widest text-xs gap-4"
         >
-          <p>&copy; 2024 UDAYA. ALL RIGHTS RESERVED.</p>
+          <p>&copy; 2026 UDAYA. ALL RIGHTS RESERVED.</p>
           <div className="flex gap-8">
              <a href="#" className="hover:text-cyan-400">PRIVACY POLICY</a>
              <a href="#" className="hover:text-cyan-400">TERMS OF SERVICE</a>

@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Play, Pause, X, Music2, Share2, Disc, Volume2 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 
-export default function Works() {
+export default function Works({ onPlayStateChange }: { onPlayStateChange?: (playing: boolean) => void }) {
   const [songs, setSongs] = useState<any[]>([]);
   const [selected, setSelected] = useState<any | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -67,6 +67,10 @@ export default function Works() {
       setHasAudio(!!selected.audioPath);
     }
   }, [selected]);
+
+  useEffect(() => {
+    if (onPlayStateChange) onPlayStateChange(isPlaying);
+  }, [isPlaying, onPlayStateChange]);
 
   const togglePlay = () => {
     if (!audioRef.current || !hasAudio) return;
