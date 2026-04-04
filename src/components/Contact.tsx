@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Send, Mail, Smartphone, MapPin, ExternalLink } from "lucide-react";
+import { Send, Mail, Smartphone, MapPin } from "lucide-react";
 import { useState } from "react";
 
 const InstagramIcon = () => (
@@ -60,9 +60,9 @@ export default function Contact() {
       <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-white/5 to-transparent pointer-events-none" />
 
       <div className="container mx-auto px-6 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+        <div className="flex flex-col lg:flex-row gap-20">
           
-          <div className="space-y-10">
+          <div className="flex-1 space-y-12">
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -77,7 +77,7 @@ export default function Contact() {
               </p>
             </motion.div>
 
-            <div className="space-y-6">
+            <div className="space-y-8">
               <div className="flex items-center gap-6 group hover:translate-x-2 transition-transform">
                 <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 group-hover:border-cyan-400/40 text-cyan-400">
                   <Mail size={28} />
@@ -97,50 +97,41 @@ export default function Contact() {
                   <p className="text-xl md:text-2xl font-bold text-white">+91 63826 66150</p>
                 </div>
               </div>
+
+              <div className="flex items-center gap-6 group hover:translate-x-2 transition-transform">
+                <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 group-hover:border-cyan-400/40 text-pink-400">
+                  <MapPin size={28} />
+                </div>
+                <div>
+                  <h4 className="text-gray-400 uppercase tracking-widest text-xs font-black">Location</h4>
+                  <p className="text-xl md:text-2xl font-bold text-white">Tamil Nadu, India</p>
+                </div>
+              </div>
             </div>
 
-            <div className="flex gap-4 pt-2">
+            <div className="flex gap-4 pt-4">
               {socialItems.map((social) => (
                 <motion.a 
                   key={social.id}
                   whileHover={{ y: -5, backgroundColor: social.color, borderColor: "transparent" }}
                   href={social.link}
                   target="_blank"
-                  className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white transition-all overflow-hidden"
+                  className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white transition-all overflow-hidden shadow-md"
                   title={social.label}
                 >
                   {social.icon}
                 </motion.a>
               ))}
             </div>
-
-            <motion.div 
-               initial={{ opacity: 0, y: 20 }}
-               whileInView={{ opacity: 1, y: 0 }}
-               viewport={{ once: true }}
-               className="glass-card p-2 bg-gradient-to-br from-white/10 to-transparent border-white/5 shadow-2xl h-64 md:h-80 w-full rounded-3xl overflow-hidden flex flex-col"
-            >
-              <iframe
-                src="https://maps.google.com/maps?q=11.102784,77.329628&t=&z=15&ie=UTF8&iwloc=&output=embed"
-                width="100%"
-                height="100%"
-                className="w-full flex-1 rounded-2xl grayscale contrast-125 opacity-80 hover:grayscale-0 hover:opacity-100 transition-all duration-500"
-                style={{ border: 0 }}
-                allowFullScreen={true}
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              ></iframe>
-            </motion.div>
           </div>
 
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="flex-1 lg:mt-0 mt-8"
+            className="flex-1"
           >
-            <div className="glass-card p-8 md:p-12 bg-gradient-to-br from-white/10 to-transparent border-white/5 shadow-2xl rounded-3xl h-full flex flex-col justify-center">
-              <h3 className="text-3xl font-black text-white mb-8">HIRE ME</h3>
+            <div className="glass-card p-8 md:p-14 bg-gradient-to-br from-white/10 to-transparent border-white/5 shadow-2xl rounded-3xl h-full flex flex-col justify-center">
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
                   <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Full Name</label>
@@ -148,7 +139,7 @@ export default function Contact() {
                     type="text" required 
                     value={formData.name}
                     onChange={(e) => setFormData({...formData, name: e.target.value})}
-                    className="w-full bg-white/5 border border-white/10 p-4 rounded-2xl text-white focus:outline-none focus:border-cyan-400 transition-colors placeholder:text-gray-600 font-bold" 
+                    className="w-full bg-white/5 border border-white/10 p-4 lg:p-5 rounded-2xl text-white focus:outline-none focus:border-cyan-400 transition-colors placeholder:text-gray-600 font-bold" 
                     placeholder="ENTER YOUR NAME"
                   />
                 </div>
@@ -160,7 +151,7 @@ export default function Contact() {
                       type="tel" required 
                       value={formData.mobile}
                       onChange={(e) => setFormData({...formData, mobile: e.target.value})}
-                      className="w-full bg-white/5 border border-white/10 p-4 rounded-2xl text-white focus:outline-none focus:border-cyan-400 transition-colors placeholder:text-gray-600 font-bold" 
+                      className="w-full bg-white/5 border border-white/10 p-4 lg:p-5 rounded-2xl text-white focus:outline-none focus:border-cyan-400 transition-colors placeholder:text-gray-600 font-bold" 
                       placeholder="+91..."
                     />
                   </div>
@@ -171,31 +162,31 @@ export default function Contact() {
                       type="email" required 
                       value={formData.email}
                       onChange={(e) => setFormData({...formData, email: e.target.value})}
-                      className="w-full bg-white/5 border border-white/10 p-4 rounded-2xl text-white focus:outline-none focus:border-cyan-400 transition-colors placeholder:text-gray-600 font-bold" 
+                      className="w-full bg-white/5 border border-white/10 p-4 lg:p-5 rounded-2xl text-white focus:outline-none focus:border-cyan-400 transition-colors placeholder:text-gray-600 font-bold" 
                       placeholder="ENTER YOUR EMAIL"
                     />
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Cover Message</label>
+                  <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Message</label>
                   <textarea 
-                    rows={5} required 
+                    rows={4} required 
                     value={formData.message}
                     onChange={(e) => setFormData({...formData, message: e.target.value})}
-                    className="w-full bg-white/5 border border-white/10 p-4 rounded-2xl text-white focus:outline-none focus:border-cyan-400 transition-colors placeholder:text-gray-600 font-bold resize-none" 
+                    className="w-full bg-white/5 border border-white/10 p-4 lg:p-5 rounded-2xl text-white focus:outline-none focus:border-cyan-400 transition-colors placeholder:text-gray-600 font-bold resize-none" 
                     placeholder="WRITE YOUR PROJECT DETAILS..."
                   />
                 </div>
 
                 <button 
                    disabled={status === "sending"}
-                   className="w-full mt-2 bg-gradient-to-r from-cyan-600 to-purple-600 p-5 rounded-2xl font-black text-white hover:shadow-[0_0_30px_rgba(0,243,255,0.3)] hover:scale-[1.02] transition-all flex items-center justify-center gap-3 disabled:opacity-50 text-lg"
+                   className="w-full mt-4 bg-gradient-to-r from-cyan-600 to-purple-600 p-5 rounded-2xl font-black text-white hover:shadow-[0_0_30px_rgba(0,243,255,0.3)] hover:scale-[1.02] transition-all flex items-center justify-center gap-3 disabled:opacity-50 text-lg"
                 >
                   {status === "sending" ? "OPENING WHATSAPP..." : status === "success" ? "REDIRECTED!" : (
                     <>
                       <Send size={24} />
-                      SEND VIA WHATSAPP
+                      HIRE ME NOW
                     </>
                   )}
                 </button>
