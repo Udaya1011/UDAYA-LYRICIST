@@ -99,6 +99,25 @@ export default function Navbar() {
                 {item.name}
               </ScrollLink>
             ))}
+            
+            <div className="flex items-center gap-6 mt-4">
+              <button 
+                onClick={() => {
+                  setIsOpen(false);
+                  document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="bg-gradient-to-r from-cyan-500 to-purple-600 px-8 py-3 rounded-full font-bold tracking-widest shadow-lg shadow-cyan-500/20"
+              >
+                HIRE ME
+              </button>
+              <a 
+                href="/admin" 
+                onClick={() => setIsOpen(false)} 
+                className="text-gray-300 hover:text-cyan-400 transition-colors p-3 rounded-full border border-white/10 bg-white/5"
+              >
+                <User size={24} />
+              </a>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
