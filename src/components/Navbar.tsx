@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Link as ScrollLink } from "react-scroll";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 import { Music, Menu, X, Disc, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -63,9 +64,9 @@ export default function Navbar() {
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-cyan-400 transition-all duration-300 group-hover:w-full" />
             </ScrollLink>
           ))}
-          <button className="bg-gradient-to-r from-cyan-500 to-purple-600 px-6 py-2 rounded-full font-bold text-sm tracking-widest hover:scale-105 transition-transform shadow-lg shadow-cyan-500/20 mr-4">
+          <Link href="/hire-me" className="bg-gradient-to-r from-cyan-500 to-purple-600 px-6 py-2 rounded-full font-bold text-sm tracking-widest hover:scale-105 transition-transform shadow-lg shadow-cyan-500/20 mr-4">
             HIRE ME
-          </button>
+          </Link>
           
           <a href="/admin" className="text-gray-300 hover:text-cyan-400 transition-colors p-2 rounded-full hover:bg-white/5 border border-white/10">
             <User size={24} />
@@ -101,15 +102,13 @@ export default function Navbar() {
             ))}
             
             <div className="flex items-center gap-6 mt-4">
-              <button 
-                onClick={() => {
-                  setIsOpen(false);
-                  document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
-                }}
-                className="bg-gradient-to-r from-cyan-500 to-purple-600 px-8 py-3 rounded-full font-bold tracking-widest shadow-lg shadow-cyan-500/20"
+              <Link 
+                href="/hire-me"
+                onClick={() => setIsOpen(false)}
+                className="bg-gradient-to-r from-cyan-500 to-purple-600 px-8 py-3 rounded-full font-bold tracking-widest shadow-lg shadow-cyan-500/20 flex items-center justify-center"
               >
                 HIRE ME
-              </button>
+              </Link>
               <a 
                 href="/admin" 
                 onClick={() => setIsOpen(false)} 
