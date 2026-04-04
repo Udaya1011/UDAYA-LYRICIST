@@ -13,8 +13,7 @@ const steps = [
 export default function BehindSong() {
   return (
     <section id="behind-the-song" className="py-24 bg-black/60 relative overflow-hidden">
-      {/* Decorative vertical lines */}
-      <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-white/5 -translate-x-1/2 md:block hidden" />
+      {/* Decorative vertical lines removed */}
       
       <div className="container mx-auto px-6 relative z-10 text-center">
         <motion.div

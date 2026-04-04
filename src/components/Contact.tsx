@@ -1,8 +1,6 @@
-"use client";
-
-import { motion } from "framer-motion";
-import { Send, Mail, Smartphone, MapPin } from "lucide-react";
 import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Send, Mail, Smartphone, MapPin, X } from "lucide-react";
 
 const InstagramIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -28,14 +26,16 @@ const LinkedinIcon = () => (
 );
 
 const socialItems = [
-  { id: "IG", icon: <InstagramIcon />, label: "Instagram", color: "#f03b5f", link: "https://www.instagram.com/udaya____10/" },
-  { id: "YT", icon: <YoutubeIcon />, label: "YouTube", color: "#ff0000", link: "https://www.youtube.com/@UdayakumarD-s2v" },
-  { id: "LI", icon: <LinkedinIcon />, label: "LinkedIn", color: "#0077b5", link: "https://www.linkedin.com/in/udayakumar-d-8471b430b" },
+  { id: "IG", icon: <InstagramIcon />, label: "Instagram", color: "#E1306C", link: "https://www.instagram.com/udaya____10/" },
+  { id: "YT", icon: <YoutubeIcon />, label: "YouTube", color: "#FF0000", link: "https://www.youtube.com/@UdayakumarD-s2v" },
+  { id: "LI", icon: <LinkedinIcon />, label: "LinkedIn", color: "#0077B5", link: "https://www.linkedin.com/in/udayakumar-d-8471b430b" },
+  { id: "MAP", icon: <MapPin size={24} />, label: "Location", color: "#4285F4", isMap: true },
 ];
 
 export default function Contact() {
   const [formData, setFormData] = useState({ name: "", mobile: "", email: "", message: "" });
   const [status, setStatus] = useState<"idle" | "sending" | "success">("idle");
+  const [activeModal, setActiveModal] = useState<"map" | "privacy" | "terms" | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -84,7 +84,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <h4 className="text-gray-400 uppercase tracking-widest text-xs font-black">Email</h4>
-                  <p className="text-xl md:text-2xl font-bold text-white">udaya@music.com</p>
+                  <p className="text-xl md:text-2xl font-bold text-white tracking-tight">alyricbyuk@gmail.com</p>
                 </div>
               </div>
 
@@ -98,7 +98,12 @@ export default function Contact() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-6 group hover:translate-x-2 transition-transform">
+              <a 
+                href="https://www.google.com/maps?q=11.102784,77.329628" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center gap-6 group hover:translate-x-2 transition-transform"
+              >
                 <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 group-hover:border-cyan-400/40 text-pink-400">
                   <MapPin size={28} />
                 </div>
@@ -106,21 +111,20 @@ export default function Contact() {
                   <h4 className="text-gray-400 uppercase tracking-widest text-xs font-black">Location</h4>
                   <p className="text-xl md:text-2xl font-bold text-white">Tamil Nadu, India</p>
                 </div>
-              </div>
+              </a>
             </div>
 
             <div className="flex gap-4 pt-4">
               {socialItems.map((social) => (
-                <motion.a 
+                <motion.div 
                   key={social.id}
+                  onClick={() => social.isMap ? setActiveModal("map") : window.open(social.link, '_blank')}
                   whileHover={{ y: -5, backgroundColor: social.color, borderColor: "transparent" }}
-                  href={social.link}
-                  target="_blank"
-                  className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white transition-all overflow-hidden shadow-md"
+                  className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white transition-all overflow-hidden shadow-md cursor-pointer"
                   title={social.label}
                 >
                   {social.icon}
-                </motion.a>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -129,66 +133,74 @@ export default function Contact() {
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="flex-1"
+            className="flex-1 relative group"
           >
-            <div className="glass-card p-8 md:p-14 bg-gradient-to-br from-white/10 to-transparent border-white/5 shadow-2xl rounded-3xl h-full flex flex-col justify-center">
+            <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-[3rem] blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+
+            <div className="relative glass-card p-8 md:p-14 bg-black/60 backdrop-blur-3xl border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)] rounded-[2.5rem] h-full flex flex-col justify-center">
+              <h3 className="text-4xl md:text-5xl font-black text-white mb-10 tracking-tighter">
+                HIRE <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-500">ME</span>
+              </h3>
               <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="space-y-2">
-                  <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Full Name</label>
+                <div className="space-y-2 relative">
+                  <label className="text-xs font-black text-gray-400 uppercase tracking-widest pl-1">Full Name</label>
                   <input 
                     type="text" required 
                     value={formData.name}
                     onChange={(e) => setFormData({...formData, name: e.target.value})}
-                    className="w-full bg-white/5 border border-white/10 p-4 lg:p-5 rounded-2xl text-white focus:outline-none focus:border-cyan-400 transition-colors placeholder:text-gray-600 font-bold" 
+                    className="w-full bg-white/5 border border-white/10 p-5 rounded-2xl text-white focus:outline-none focus:border-cyan-400 focus:bg-white/10 transition-all placeholder:text-gray-600 font-bold" 
                     placeholder="ENTER YOUR NAME"
                   />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Mobile Number</label>
+                  <div className="space-y-2 relative">
+                    <label className="text-xs font-black text-gray-400 uppercase tracking-widest pl-1">Mobile Number</label>
                     <input 
                       type="tel" required 
                       value={formData.mobile}
                       onChange={(e) => setFormData({...formData, mobile: e.target.value})}
-                      className="w-full bg-white/5 border border-white/10 p-4 lg:p-5 rounded-2xl text-white focus:outline-none focus:border-cyan-400 transition-colors placeholder:text-gray-600 font-bold" 
+                      className="w-full bg-white/5 border border-white/10 p-5 rounded-2xl text-white focus:outline-none focus:border-purple-400 focus:bg-white/10 transition-all placeholder:text-gray-600 font-bold" 
                       placeholder="+91..."
                     />
                   </div>
 
-                  <div className="space-y-2">
-                    <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Email Address</label>
+                  <div className="space-y-2 relative">
+                    <label className="text-xs font-black text-gray-400 uppercase tracking-widest pl-1">Email Address</label>
                     <input 
                       type="email" required 
                       value={formData.email}
                       onChange={(e) => setFormData({...formData, email: e.target.value})}
-                      className="w-full bg-white/5 border border-white/10 p-4 lg:p-5 rounded-2xl text-white focus:outline-none focus:border-cyan-400 transition-colors placeholder:text-gray-600 font-bold" 
+                      className="w-full bg-white/5 border border-white/10 p-5 rounded-2xl text-white focus:outline-none focus:border-cyan-400 focus:bg-white/10 transition-all placeholder:text-gray-600 font-bold" 
                       placeholder="ENTER YOUR EMAIL"
                     />
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Message</label>
+                <div className="space-y-2 relative">
+                  <label className="text-xs font-black text-gray-400 uppercase tracking-widest pl-1">Message</label>
                   <textarea 
                     rows={4} required 
                     value={formData.message}
                     onChange={(e) => setFormData({...formData, message: e.target.value})}
-                    className="w-full bg-white/5 border border-white/10 p-4 lg:p-5 rounded-2xl text-white focus:outline-none focus:border-cyan-400 transition-colors placeholder:text-gray-600 font-bold resize-none" 
+                    className="w-full bg-white/5 border border-white/10 p-5 rounded-2xl text-white focus:outline-none focus:border-cyan-400 focus:bg-white/10 transition-all placeholder:text-gray-600 font-bold resize-none" 
                     placeholder="WRITE YOUR PROJECT DETAILS..."
                   />
                 </div>
 
                 <button 
                    disabled={status === "sending"}
-                   className="w-full mt-4 bg-gradient-to-r from-cyan-600 to-purple-600 p-5 rounded-2xl font-black text-white hover:shadow-[0_0_30px_rgba(0,243,255,0.3)] hover:scale-[1.02] transition-all flex items-center justify-center gap-3 disabled:opacity-50 text-lg"
+                   className="w-full mt-6 relative group/btn overflow-hidden bg-white/5 p-6 rounded-2xl font-black text-white hover:scale-[1.02] transition-all flex items-center justify-center gap-3 disabled:opacity-50 text-lg border border-white/10 shadow-2xl"
                 >
-                  {status === "sending" ? "OPENING WHATSAPP..." : status === "success" ? "REDIRECTED!" : (
-                    <>
-                      <Send size={24} />
-                      HIRE ME NOW
-                    </>
-                  )}
+                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-600 to-purple-600 opacity-90 group-hover/btn:opacity-100 transition-opacity"></div>
+                  <span className="relative z-10 flex items-center gap-3 tracking-widest">
+                    {status === "sending" ? "OPENING WHATSAPP..." : status === "success" ? "REDIRECTED!" : (
+                      <>
+                        <Send size={24} />
+                        HIRE ME NOW
+                      </>
+                    )}
+                  </span>
                 </button>
               </form>
             </div>
@@ -203,11 +215,102 @@ export default function Contact() {
         >
           <p>&copy; 2026 UDAYA. ALL RIGHTS RESERVED.</p>
           <div className="flex gap-8">
-             <a href="#" className="hover:text-cyan-400">PRIVACY POLICY</a>
-             <a href="#" className="hover:text-cyan-400">TERMS OF SERVICE</a>
+             <button onClick={() => setActiveModal("privacy")} className="hover:text-cyan-400 transition-colors uppercase">PRIVACY POLICY</button>
+             <button onClick={() => setActiveModal("terms")} className="hover:text-cyan-400 transition-colors uppercase">TERMS OF SERVICE</button>
           </div>
         </motion.div>
       </div>
+
+      {/* Shared Content Modal */}
+      <AnimatePresence>
+        {activeModal && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-black/80 backdrop-blur-md"
+            onClick={() => setActiveModal(null)}
+          >
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              className="relative w-full max-w-4xl bg-black border border-white/10 rounded-[2.5rem] overflow-hidden shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button 
+                onClick={() => setActiveModal(null)}
+                className="absolute top-6 right-6 z-10 p-3 bg-black/60 backdrop-blur-md border border-white/10 rounded-full text-white hover:text-cyan-400 transition-colors"
+              >
+                <X size={24} />
+              </button>
+
+              {activeModal === "map" ? (
+                <>
+                  <div className="h-[60vh] w-full">
+                    <iframe
+                      src="https://maps.google.com/maps?q=11.102784,77.329628&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                      width="100%"
+                      height="100%"
+                      className="w-full h-full grayscale contrast-125 opacity-90 transition-all duration-500"
+                      style={{ border: 0 }}
+                      allowFullScreen={true}
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                    ></iframe>
+                  </div>
+                  <div className="p-8 bg-gradient-to-br from-white/5 to-transparent border-t border-white/10 flex justify-between items-center">
+                    <div>
+                      <h4 className="text-white font-black text-2xl tracking-tighter">MY LOCATION</h4>
+                      <p className="text-gray-400">Tamil Nadu, India</p>
+                    </div>
+                    <a 
+                      href="https://www.google.com/maps?q=11.102784,77.329628" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="px-6 py-3 bg-cyan-600 rounded-xl font-bold text-sm tracking-widest hover:bg-cyan-500 transition-colors flex items-center gap-2"
+                    >
+                      OPEN IN GOOGLE MAPS
+                    </a>
+                  </div>
+                </>
+              ) : (
+                <div className="p-10 md:p-14 max-h-[80vh] overflow-y-auto custom-scrollbar">
+                  <h2 className="text-4xl font-black text-white mb-8 tracking-tighter uppercase">
+                    {activeModal === "privacy" ? "Privacy Policy" : "Terms of Service"}
+                  </h2>
+                  <div className="space-y-6 text-gray-400 text-lg leading-relaxed font-light">
+                    <p>
+                      Welcome to UDAYA's official portfolio. Your {activeModal === "privacy" ? "privacy is extremely important" : "compliance with our rules matters"} to us.
+                    </p>
+                    <section className="space-y-4">
+                      <h4 className="text-white font-bold uppercase tracking-widest text-sm">1. Introduction</h4>
+                      <p>
+                        This documentation outlines how we handle {activeModal === "privacy" ? "your personal information and data connectivity" : "usage of our intellectual property and media content"}.
+                      </p>
+                    </section>
+                    <section className="space-y-4">
+                      <h4 className="text-white font-bold uppercase tracking-widest text-sm">2. Usage</h4>
+                      <p>
+                        All media files, including audio tracks and lyrics showcased here, are protected under copyright law. {activeModal === "privacy" ? "We do not store your personal data longer than necessary to facilitate project communication." : "Unauthorized distribution of these materials is strictly prohibited."}
+                      </p>
+                    </section>
+                    <section className="space-y-4">
+                      <h4 className="text-white font-bold uppercase tracking-widest text-sm">3. Updates</h4>
+                      <p>
+                        We reserve the right to update these {activeModal === "privacy" ? "policy" : "terms"} at any time. Continued use of the site implies acceptance of the latest version.
+                      </p>
+                    </section>
+                    <p className="pt-6 font-bold text-cyan-400">
+                      Contact: alyricbyuk@gmail.com for any further inquiries.
+                    </p>
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
