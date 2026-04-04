@@ -28,8 +28,8 @@ const LinkedinIcon = () => (
 );
 
 const socialItems = [
-  { id: "IG", icon: <InstagramIcon />, label: "Instagram", color: "#f03b5f", link: "#" },
-  { id: "YT", icon: <YoutubeIcon />, label: "YouTube", color: "#ff0000", link: "#" },
+  { id: "IG", icon: <InstagramIcon />, label: "Instagram", color: "#f03b5f", link: "https://www.instagram.com/udaya____10/" },
+  { id: "YT", icon: <YoutubeIcon />, label: "YouTube", color: "#ff0000", link: "https://www.youtube.com/@UdayakumarD-s2v" },
   { id: "LI", icon: <LinkedinIcon />, label: "LinkedIn", color: "#0077b5", link: "https://www.linkedin.com/in/udayakumar-d-8471b430b" },
 ];
 
@@ -120,47 +120,17 @@ export default function Contact() {
             viewport={{ once: true }}
             className="flex-1"
           >
-            <div className="glass-card p-10 md:p-14 bg-gradient-to-br from-white/10 to-transparent border-white/5 shadow-2xl">
-              <form onSubmit={handleSubmit} className="space-y-8">
-                <div className="space-y-2">
-                  <label className="text-sm font-black text-gray-400 uppercase tracking-widest ml-1">Full Name</label>
-                  <input 
-                    type="text" required 
-                    className="w-full bg-white/5 border border-white/10 p-5 rounded-2xl text-white focus:outline-none focus:border-cyan-400 transition-colors placeholder:text-gray-600 font-bold" 
-                    placeholder="ENTER YOUR NAME"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-black text-gray-400 uppercase tracking-widest ml-1">Email Address</label>
-                  <input 
-                    type="email" required 
-                    className="w-full bg-white/5 border border-white/10 p-5 rounded-2xl text-white focus:outline-none focus:border-cyan-400 transition-colors placeholder:text-gray-600 font-bold" 
-                    placeholder="ENTER YOUR EMAIL"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-black text-gray-400 uppercase tracking-widest ml-1">Message</label>
-                  <textarea 
-                    rows={4} required 
-                    className="w-full bg-white/5 border border-white/10 p-5 rounded-2xl text-white focus:outline-none focus:border-cyan-400 transition-colors placeholder:text-gray-600 font-bold resize-none" 
-                    placeholder="WRITE YOUR MESSAGE..."
-                  />
-                </div>
-
-                <button 
-                   disabled={status === "sending"}
-                   className="w-full mt-4 bg-gradient-to-r from-cyan-600 to-purple-600 p-6 rounded-2xl font-black text-white hover:shadow-[0_0_30px_rgba(0,243,255,0.3)] hover:scale-[1.02] transition-all flex items-center justify-center gap-3 disabled:opacity-50"
-                >
-                  {status === "sending" ? "TRANSMITTING..." : status === "success" ? "MESSAGE SENT!" : (
-                    <>
-                      <Send size={24} />
-                      SEND SIGNAL
-                    </>
-                  )}
-                </button>
-              </form>
+            <div className="glass-card p-2 bg-gradient-to-br from-white/10 to-transparent border-white/5 shadow-2xl h-full min-h-[400px] rounded-3xl overflow-hidden flex flex-col">
+              <iframe
+                src="https://maps.google.com/maps?q=11.102784,77.329628&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                width="100%"
+                height="100%"
+                className="w-full flex-1 rounded-2xl grayscale contrast-125 opacity-80 hover:grayscale-0 hover:opacity-100 transition-all duration-500 min-h-[400px] md:min-h-full"
+                style={{ border: 0 }}
+                allowFullScreen={true}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              ></iframe>
             </div>
           </motion.div>
 
