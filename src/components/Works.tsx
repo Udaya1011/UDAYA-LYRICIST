@@ -564,19 +564,25 @@ export default function Works({ onPlayStateChange }: WorksProps) {
               
               {/* LEFT HALF: Media Stage (Image/Video with Play/Pause on Tap) */}
               <div 
-                className="relative w-full md:w-[58%] h-[45vh] md:h-full bg-black flex items-center justify-center select-none overflow-hidden group cursor-pointer"
+                className="relative w-full md:w-[52%] lg:w-[56%] h-[22vh] min-h-[160px] max-h-[220px] md:h-full md:max-h-none bg-black flex items-center justify-center select-none overflow-hidden group cursor-pointer shrink-0"
                 onDoubleClick={handleDoubleTapMedia}
                 onClick={togglePlay}
               >
-                {/* Media Image */}
+                {/* Ambient blur glow for mobile */}
+                <div 
+                  className="absolute inset-0 bg-cover bg-center blur-2xl opacity-30 scale-125 md:hidden"
+                  style={{ backgroundImage: `url(${selectedSong.thumbPath})` }}
+                />
+
+                {/* Media Image: Compact square art on mobile, full stage on desktop */}
                 <img
                   src={selectedSong.thumbPath}
                   alt={selectedSong.title}
-                  className="w-full h-full object-cover object-center"
+                  className="relative z-10 h-full w-auto aspect-square object-cover md:w-full md:h-full md:aspect-auto shadow-2xl rounded-2xl md:rounded-none border border-white/10 md:border-0 my-2 md:my-0"
                 />
 
                 {/* Gradient vignette */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none hidden md:block" />
 
                 {/* Double Tap Heart Animation (Instagram style ❤️) */}
                 <AnimatePresence>
@@ -588,23 +594,24 @@ export default function Works({ onPlayStateChange }: WorksProps) {
                       transition={{ duration: 0.6 }}
                       className="absolute inset-0 flex items-center justify-center pointer-events-none z-30"
                     >
-                      <Heart size={100} className="fill-red-500 text-red-500 drop-shadow-[0_0_30px_rgba(239,68,68,0.8)]" />
+                      <Heart size={80} className="fill-red-500 text-red-500 drop-shadow-[0_0_30px_rgba(239,68,68,0.8)]" />
                     </motion.div>
                   )}
                 </AnimatePresence>
 
                 {/* Center Play/Pause Indicator (fades out when playing) */}
                 {!isPlaying && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/30 pointer-events-none">
-                    <div className="w-16 h-16 rounded-full bg-black/60 backdrop-blur-md border border-white/20 flex items-center justify-center text-white shadow-2xl">
-                      <Play size={28} fill="white" className="ml-1" />
+                  <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/25 pointer-events-none">
+                    <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-black/60 backdrop-blur-md border border-white/20 flex items-center justify-center text-white shadow-2xl">
+                      <Play size={20} fill="white" className="ml-0.5 sm:hidden" />
+                      <Play size={28} fill="white" className="ml-1 hidden sm:block" />
                     </div>
                   </div>
                 )}
 
                 {/* Top-Left Audio Type badge */}
-                <div className="absolute top-4 left-4 z-20 flex items-center gap-2 bg-black/70 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 text-xs font-semibold text-white pointer-events-none">
-                  <Disc size={13} className={cn("text-cyan-400", isPlaying ? "animate-spin-slow" : "")} />
+                <div className="absolute top-2.5 left-2.5 sm:top-4 sm:left-4 z-20 flex items-center gap-1.5 sm:gap-2 bg-black/70 backdrop-blur-md px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full border border-white/10 text-[10px] sm:text-xs font-semibold text-white pointer-events-none">
+                  <Disc size={12} className={cn("text-cyan-400", isPlaying ? "animate-spin-slow" : "")} />
                   <span>Original Track • Udaya</span>
                 </div>
 
@@ -614,20 +621,20 @@ export default function Works({ onPlayStateChange }: WorksProps) {
                     e.stopPropagation();
                     toggleMute();
                   }}
-                  className="absolute bottom-4 right-4 z-20 p-2.5 rounded-full bg-black/70 backdrop-blur-md border border-white/15 text-white hover:text-cyan-400 transition-colors shadow-lg"
+                  className="absolute bottom-2.5 right-2.5 sm:bottom-4 sm:right-4 z-20 p-2 sm:p-2.5 rounded-full bg-black/70 backdrop-blur-md border border-white/15 text-white hover:text-cyan-400 transition-colors shadow-lg"
                   title={isMuted ? "Unmute" : "Mute"}
                 >
-                  {isMuted ? <VolumeX size={16} /> : <Volume2 size={16} />}
+                  {isMuted ? <VolumeX size={14} className="sm:w-4 sm:h-4" /> : <Volume2 size={14} className="sm:w-4 sm:h-4" />}
                 </button>
               </div>
 
               {/* RIGHT HALF: Instagram Profile Header, Lyrics & Controls */}
-              <div className="w-full md:w-[42%] flex-1 flex flex-col justify-between bg-zinc-950 border-t md:border-t-0 md:border-l border-zinc-850 h-full overflow-hidden">
+              <div className="w-full md:w-[48%] lg:w-[44%] flex-1 flex flex-col justify-between bg-zinc-950 border-t md:border-t-0 md:border-l border-zinc-850 h-full overflow-hidden min-h-0">
                 
                 {/* 1. Header (Instagram Profile Info) */}
-                <div className="p-4 sm:p-5 border-b border-zinc-850 flex items-center justify-between bg-zinc-950 flex-shrink-0">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full p-0.5 bg-gradient-to-tr from-amber-500 via-pink-500 to-purple-600 flex-shrink-0">
+                <div className="p-3 sm:p-4 md:p-5 border-b border-zinc-850 flex items-center justify-between bg-zinc-950 flex-shrink-0">
+                  <div className="flex items-center gap-2.5 sm:gap-3">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full p-0.5 bg-gradient-to-tr from-amber-500 via-pink-500 to-purple-600 flex-shrink-0">
                       <div className="w-full h-full rounded-full overflow-hidden bg-black p-0.5">
                         <img
                           src="/profile.png"
@@ -639,7 +646,7 @@ export default function Works({ onPlayStateChange }: WorksProps) {
 
                     <div>
                       <div className="flex items-center gap-1.5">
-                        <span className="font-bold text-sm text-white hover:underline cursor-pointer">
+                        <span className="font-bold text-xs sm:text-sm text-white hover:underline cursor-pointer">
                           udaya____10
                         </span>
                         <span className="w-3.5 h-3.5 rounded-full bg-cyan-400 flex items-center justify-center text-[9px] text-black font-black" title="Verified Creator">
@@ -650,12 +657,12 @@ export default function Works({ onPlayStateChange }: WorksProps) {
                           href="https://www.instagram.com/udaya____10/"
                           target="_blank"
                           rel="noreferrer"
-                          className="text-xs font-bold text-cyan-400 hover:text-cyan-300"
+                          className="text-[11px] sm:text-xs font-bold text-cyan-400 hover:text-cyan-300"
                         >
                           Follow
                         </a>
                       </div>
-                      <span className="text-[11px] text-zinc-400 block">
+                      <span className="text-[10px] sm:text-[11px] text-zinc-400 block">
                         Tamil Lyricist & AI Music Creator
                       </span>
                     </div>
@@ -673,7 +680,7 @@ export default function Works({ onPlayStateChange }: WorksProps) {
                 </div>
 
                 {/* 2. Middle Content (Caption, Song Title & Lyrics - Scrollable) */}
-                <div className="p-4 sm:p-5 flex-1 overflow-y-auto space-y-4 text-xs leading-relaxed">
+                <div className="p-3 sm:p-4 md:p-5 flex-1 overflow-y-auto space-y-3 sm:space-y-4 text-xs leading-relaxed min-h-0">
                   
                   {/* Song Title & Caption */}
                   <div className="space-y-1 pb-3 border-b border-zinc-900">
@@ -733,7 +740,7 @@ export default function Works({ onPlayStateChange }: WorksProps) {
                 </div>
 
                 {/* 3. Footer Bar (Instagram Actions & Scrubber) */}
-                <div className="p-4 sm:p-5 border-t border-zinc-850 bg-zinc-950 space-y-3 flex-shrink-0">
+                <div className="p-3 sm:p-4 md:p-5 border-t border-zinc-850 bg-zinc-950 space-y-2 sm:space-y-3 flex-shrink-0">
                   
                   {/* Action Icons Row */}
                   <div className="flex items-center justify-between">
@@ -821,7 +828,7 @@ export default function Works({ onPlayStateChange }: WorksProps) {
                       href={selectedSong.insta}
                       target="_blank"
                       rel="noreferrer"
-                      className="w-full py-2 rounded-xl bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 text-[11px] font-bold text-white flex items-center justify-center gap-1.5 transition-colors"
+                      className="w-full py-1.5 sm:py-2 rounded-xl bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 text-[10px] sm:text-[11px] font-bold text-white flex items-center justify-center gap-1.5 transition-colors"
                     >
                       <span>View Official Instagram Reel</span>
                       <ExternalLink size={12} className="text-zinc-400" />
