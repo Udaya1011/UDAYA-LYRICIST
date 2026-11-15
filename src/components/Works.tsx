@@ -1,10 +1,10 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Play, Pause, X, Share2, Disc, Volume2, VolumeX, Search, 
-  Copy, Check, ExternalLink, Heart, MessageCircle, Bookmark, 
-  ChevronLeft, ChevronRight, MoreHorizontal, Download
+import {
+  Play, Pause, X, Share2, Disc, Volume2, VolumeX, Search,
+  Copy, Check, ExternalLink, Heart, MessageCircle, Bookmark,
+  ChevronLeft, ChevronRight, MoreHorizontal, Download, ChevronDown, ChevronUp
 } from "lucide-react";
 import { useState, useRef, useEffect, useMemo } from "react";
 import { INITIAL_SONGS, SongItem } from "@/lib/initialSongs";
@@ -162,16 +162,65 @@ export default function Works({ onPlayStateChange }: WorksProps) {
     setSelectedIndex(null);
   };
 
+  const [slideDirection, setSlideDirection] = useState<number>(1);
+  const touchStartRef = useRef<{ x: number; y: number; time: number } | null>(null);
+
   const handleNext = () => {
     if (selectedIndex === null) return;
+    setSlideDirection(1);
     const nextIdx = (selectedIndex + 1) % filteredSongs.length;
     handleOpenSong(nextIdx);
   };
 
   const handlePrev = () => {
     if (selectedIndex === null) return;
+    setSlideDirection(-1);
     const prevIdx = (selectedIndex - 1 + filteredSongs.length) % filteredSongs.length;
     handleOpenSong(prevIdx);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartRef.current = {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY,
+      time: Date.now(),
+    };
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!touchStartRef.current) return;
+    const deltaX = e.changedTouches[0].clientX - touchStartRef.current.x;
+    const deltaY = e.changedTouches[0].clientY - touchStartRef.current.y;
+    const deltaTime = Date.now() - touchStartRef.current.time;
+    touchStartRef.current = null;
+
+    const target = e.target as HTMLElement;
+    const isLyricsScroll = target && target.closest(".lyrics-scroll-area");
+    // If inside lyrics and small swipe, let user scroll lyrics
+    if (isLyricsScroll && Math.abs(deltaY) < 80) {
+      return;
+    }
+
+    const absX = Math.abs(deltaX);
+    const absY = Math.abs(deltaY);
+
+    if (Math.max(absX, absY) > 40 && deltaTime < 800) {
+      if (absY > absX) {
+        // Vertical swipe (Instagram Reels style!)
+        if (deltaY < -40) {
+          handleNext();
+        } else if (deltaY > 40) {
+          handlePrev();
+        }
+      } else {
+        // Horizontal swipe (Stories style)
+        if (deltaX < -40) {
+          handleNext();
+        } else if (deltaX > 40) {
+          handlePrev();
+        }
+      }
+    }
   };
 
   // Keyboard navigation like Instagram
@@ -358,7 +407,7 @@ export default function Works({ onPlayStateChange }: WorksProps) {
   return (
     <section id="works" className="py-20 bg-black relative">
       <div className="max-w-6xl mx-auto px-6">
-        
+
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-10 space-y-3">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-cyan-400 text-xs font-semibold uppercase tracking-wider">
@@ -377,7 +426,7 @@ export default function Works({ onPlayStateChange }: WorksProps) {
 
         {/* Filter Tabs & Search Bar */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
-          
+
           {/* Category Filter Chips */}
           <div className="flex flex-wrap items-center justify-center gap-2">
             {[
@@ -558,10 +607,12 @@ export default function Works({ onPlayStateChange }: WorksProps) {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="relative w-full sm:max-w-5xl h-full sm:h-[88vh] max-h-[850px] bg-black sm:border sm:border-zinc-800 sm:rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row"
+              className="relative w-full sm:max-w-5xl h-full sm:h-[88vh] max-h-[850px] bg-black sm:border sm:border-zinc-800 sm:rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row touch-pan-y"
               onClick={(e) => e.stopPropagation()}
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
             >
-              
+
               {/* MOBILE ONLY: Profile ID Header (Placed on TOP of the image) */}
               <div className="md:hidden px-3.5 py-2.5 border-b border-zinc-850 flex items-center justify-between bg-zinc-950 flex-shrink-0 z-30">
                 <div className="flex items-center gap-2.5">
@@ -620,23 +671,38 @@ export default function Works({ onPlayStateChange }: WorksProps) {
               </div>
 
               {/* LEFT HALF: Media Stage (Image/Video with Play/Pause on Tap) */}
-              <div 
+              <div
                 className="relative w-full md:w-[52%] lg:w-[56%] h-[22vh] min-h-[160px] max-h-[220px] md:h-full md:max-h-none bg-black flex items-center justify-center select-none overflow-hidden group cursor-pointer shrink-0"
                 onDoubleClick={handleDoubleTapMedia}
                 onClick={togglePlay}
               >
                 {/* Ambient blur glow for mobile */}
-                <div 
+                <div
                   className="absolute inset-0 bg-cover bg-center blur-2xl opacity-30 scale-125 md:hidden"
                   style={{ backgroundImage: `url(${selectedSong.thumbPath})` }}
                 />
 
-                {/* Media Image: Compact square art on mobile, full stage on desktop */}
-                <img
-                  src={selectedSong.thumbPath}
-                  alt={selectedSong.title}
-                  className="relative z-10 h-full w-auto aspect-square object-cover md:w-full md:h-full md:aspect-auto shadow-2xl rounded-2xl md:rounded-none border border-white/10 md:border-0 my-2 md:my-0"
-                />
+                {/* Media Image: Compact square art on mobile with animated slide for Reels */}
+                <div className="relative z-10 h-full w-auto aspect-square flex items-center justify-center overflow-hidden">
+                  <AnimatePresence mode="wait" custom={slideDirection}>
+                    <motion.img
+                      key={selectedSong._id}
+                      src={selectedSong.thumbPath}
+                      alt={selectedSong.title}
+                      initial={{ opacity: 0, y: slideDirection * 50 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: slideDirection * -50 }}
+                      transition={{ duration: 0.25, ease: "easeOut" }}
+                      className="h-full w-full object-cover md:w-full md:h-full md:aspect-auto shadow-2xl rounded-2xl md:rounded-none border border-white/10 md:border-0 my-2 md:my-0"
+                    />
+                  </AnimatePresence>
+                </div>
+
+                {/* Mobile Reels Swipe Indicator */}
+                <div className="md:hidden absolute bottom-1.5 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-black/80 backdrop-blur-md border border-white/15 text-[9px] font-mono text-zinc-300 pointer-events-none shadow-lg">
+                  <span className="text-[10px] text-cyan-400 font-bold">↕</span>
+                  <span>Swipe for next</span>
+                </div>
 
                 {/* Gradient vignette */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none hidden md:block" />
@@ -687,7 +753,7 @@ export default function Works({ onPlayStateChange }: WorksProps) {
 
               {/* RIGHT HALF: Instagram Profile Header, Lyrics & Controls */}
               <div className="w-full md:w-[48%] lg:w-[44%] flex-1 flex flex-col justify-between bg-zinc-950 border-t md:border-t-0 md:border-l border-zinc-850 h-full overflow-hidden min-h-0">
-                
+
                 {/* 1. Header (Instagram Profile Info - Desktop Only) */}
                 <div className="hidden md:flex p-4 md:p-5 border-b border-zinc-850 items-center justify-between bg-zinc-950 flex-shrink-0">
                   <div className="flex items-center gap-2.5 sm:gap-3">
@@ -737,164 +803,164 @@ export default function Works({ onPlayStateChange }: WorksProps) {
                 </div>
 
                 {/* 2. Middle Content (Caption, Song Title & Lyrics - Scrollable) */}
-                <div className="p-3 sm:p-4 md:p-5 flex-1 overflow-y-auto space-y-3 sm:space-y-4 text-xs leading-relaxed min-h-0">
-                  
-                  {/* Song Title & Caption */}
-                  <div className="space-y-1 pb-3 border-b border-zinc-900">
-                    <h3 className="text-base font-black text-white tracking-tight">
-                      {selectedSong.title}
-                    </h3>
-                    {selectedSong.desc && (
-                      <p className="text-zinc-400 text-xs italic">
-                        {selectedSong.desc}
-                      </p>
-                    )}
-                  </div>
+                <div className="p-3 sm:p-4 md:p-5 flex-1 overflow-y-auto space-y-3 sm:space-y-4 text-xs leading-relaxed min-h-0 lyrics-scroll-area">
 
-                  {/* Lyrics Section */}
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold uppercase tracking-wider text-cyan-400 text-[11px] flex items-center gap-1">
-                        Song Lyrics
-                      </span>
-
-                      {selectedSong.lyrics && (
-                        <button
-                          onClick={handleCopyLyrics}
-                          className="px-2.5 py-1 rounded-md bg-zinc-900 hover:bg-zinc-800 text-[11px] text-zinc-300 hover:text-white border border-zinc-850 flex items-center gap-1 cursor-pointer"
-                        >
-                          {copiedLyrics ? (
-                            <>
-                              <Check size={11} className="text-emerald-400" />
-                              <span className="text-emerald-400">Copied</span>
-                            </>
-                          ) : (
-                            <>
-                              <Copy size={11} />
-                              <span>Copy</span>
-                            </>
-                          )}
-                        </button>
-                      )}
-                    </div>
-
-                    <div className="p-4 rounded-xl bg-black border border-zinc-900 text-zinc-200">
-                      {selectedSong.lyrics ? (
-                        <pre className="text-xs sm:text-sm whitespace-pre-line font-sans leading-relaxed selection:bg-cyan-400 selection:text-black">
-                          {selectedSong.lyrics}
-                        </pre>
-                      ) : (
-                        <p className="text-zinc-500 italic py-4 text-center">
-                          Lyrics for this track will be available soon.
+                    {/* Song Title & Caption */}
+                    <div className="space-y-1 pb-3 border-b border-zinc-900">
+                      <h3 className="text-base font-black text-white tracking-tight">
+                        {selectedSong.title}
+                      </h3>
+                      {selectedSong.desc && (
+                        <p className="text-zinc-400 text-xs italic">
+                          {selectedSong.desc}
                         </p>
                       )}
                     </div>
-                  </div>
 
-                  <div className="text-[10px] text-zinc-500 uppercase tracking-widest pt-2">
-                    Original Release by Udaya
-                  </div>
-                </div>
+                    {/* Lyrics Section */}
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold uppercase tracking-wider text-cyan-400 text-[11px] flex items-center gap-1">
+                          Song Lyrics
+                        </span>
 
-                {/* 3. Footer Bar (Instagram Actions & Scrubber) */}
-                <div className="p-3 sm:p-4 md:p-5 border-t border-zinc-850 bg-zinc-950 space-y-2 sm:space-y-3 flex-shrink-0">
-                  
-                  {/* Action Icons Row */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      {/* Like button */}
-                      <button
-                        onClick={toggleLike}
-                        className="text-white hover:text-red-500 transition-colors cursor-pointer"
-                        title="Like this track"
-                      >
-                        <Heart
-                          size={22}
-                          className={cn(
-                            likedSongs[selectedSong._id]
-                              ? "fill-red-500 text-red-500"
-                              : "text-white hover:text-red-500"
-                          )}
-                        />
-                      </button>
-
-                      {/* Download button next to like */}
-                      <button
-                        onClick={(e) => handleDownload(selectedSong, e)}
-                        className="text-white hover:text-cyan-400 transition-colors cursor-pointer"
-                        title="Download track (MP3)"
-                      >
-                        {downloadingId === selectedSong._id ? (
-                          <span className="w-5 h-5 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin inline-block" />
-                        ) : (
-                          <Download size={22} />
+                        {selectedSong.lyrics && (
+                          <button
+                            onClick={handleCopyLyrics}
+                            className="px-2.5 py-1 rounded-md bg-zinc-900 hover:bg-zinc-800 text-[11px] text-zinc-300 hover:text-white border border-zinc-850 flex items-center gap-1 cursor-pointer"
+                          >
+                            {copiedLyrics ? (
+                              <>
+                                <Check size={11} className="text-emerald-400" />
+                                <span className="text-emerald-400">Copied</span>
+                              </>
+                            ) : (
+                              <>
+                                <Copy size={11} />
+                                <span>Copy</span>
+                              </>
+                            )}
+                          </button>
                         )}
-                      </button>
+                      </div>
 
-                      {/* Comment/Lyrics icon */}
-                      <button
-                        onClick={handleCopyLyrics}
-                        className="text-white hover:text-cyan-400 transition-colors cursor-pointer"
-                        title="Copy lyrics"
-                      >
-                        <MessageCircle size={22} />
-                      </button>
-
-                      {/* Share Track */}
-                      <button
-                        onClick={() => handleShareSong(selectedSong)}
-                        className="text-white hover:text-cyan-400 transition-colors cursor-pointer"
-                        title="Share Track"
-                      >
-                        <Share2 size={21} />
-                      </button>
-                    </div>
-
-                    {/* Play/Pause Button */}
-                    <button
-                      onClick={togglePlay}
-                      className="w-10 h-10 rounded-full bg-cyan-400 text-black flex items-center justify-center hover:bg-cyan-300 transition-colors cursor-pointer shadow-lg shadow-cyan-400/20"
-                    >
-                      {isPlaying ? <Pause size={16} fill="black" /> : <Play size={16} fill="black" className="ml-0.5" />}
-                    </button>
-                  </div>
-
-                  {/* Scrubber & Timestamps */}
-                  <div className="space-y-1">
-                    <div
-                      onClick={handleSeek}
-                      className="h-1.5 w-full bg-zinc-800 rounded-full cursor-pointer relative"
-                    >
-                      <div
-                        className="h-full bg-cyan-400 rounded-full relative"
-                        style={{ width: `${(currentTime / (duration || 1)) * 100}%` }}
-                      >
-                        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-white rounded-full shadow" />
+                      <div className="p-4 rounded-xl bg-black border border-zinc-900 text-zinc-200">
+                        {selectedSong.lyrics ? (
+                          <pre className="text-xs sm:text-sm whitespace-pre-line font-sans leading-relaxed selection:bg-cyan-400 selection:text-black">
+                            {selectedSong.lyrics}
+                          </pre>
+                        ) : (
+                          <p className="text-zinc-500 italic py-4 text-center">
+                            Lyrics for this track will be available soon.
+                          </p>
+                        )}
                       </div>
                     </div>
 
-                    <div className="flex justify-between text-[10px] font-mono text-zinc-500">
-                      <span className="text-cyan-400 font-bold">{formatTime(currentTime)}</span>
-                      <span>{formatTime(duration)}</span>
+                    <div className="text-[10px] text-zinc-500 uppercase tracking-widest pt-2">
+                      Original Release by Udaya
                     </div>
                   </div>
 
-                  {/* Instagram Direct Link */}
-                  {selectedSong.insta && (
-                    <a
-                      href={selectedSong.insta}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="w-full py-1.5 sm:py-2 rounded-xl bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 text-[10px] sm:text-[11px] font-bold text-white flex items-center justify-center gap-1.5 transition-colors"
-                    >
-                      <span>View Official Instagram Reel</span>
-                      <ExternalLink size={12} className="text-zinc-400" />
-                    </a>
-                  )}
+                  {/* 3. Footer Bar (Instagram Actions & Scrubber) */}
+                  <div className="p-3 sm:p-4 md:p-5 border-t border-zinc-850 bg-zinc-950 space-y-2 sm:space-y-3 flex-shrink-0">
+
+                    {/* Action Icons Row */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        {/* Like button */}
+                        <button
+                          onClick={toggleLike}
+                          className="text-white hover:text-red-500 transition-colors cursor-pointer"
+                          title="Like this track"
+                        >
+                          <Heart
+                            size={22}
+                            className={cn(
+                              likedSongs[selectedSong._id]
+                                ? "fill-red-500 text-red-500"
+                                : "text-white hover:text-red-500"
+                            )}
+                          />
+                        </button>
+
+                        {/* Download button next to like */}
+                        <button
+                          onClick={(e) => handleDownload(selectedSong, e)}
+                          className="text-white hover:text-cyan-400 transition-colors cursor-pointer"
+                          title="Download track (MP3)"
+                        >
+                          {downloadingId === selectedSong._id ? (
+                            <span className="w-5 h-5 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin inline-block" />
+                          ) : (
+                            <Download size={22} />
+                          )}
+                        </button>
+
+                        {/* Comment/Lyrics icon */}
+                        <button
+                          onClick={handleCopyLyrics}
+                          className="text-white hover:text-cyan-400 transition-colors cursor-pointer"
+                          title="Copy lyrics"
+                        >
+                          <MessageCircle size={22} />
+                        </button>
+
+                        {/* Share Track */}
+                        <button
+                          onClick={() => handleShareSong(selectedSong)}
+                          className="text-white hover:text-cyan-400 transition-colors cursor-pointer"
+                          title="Share Track"
+                        >
+                          <Share2 size={21} />
+                        </button>
+                      </div>
+
+                      {/* Play/Pause Button */}
+                      <button
+                        onClick={togglePlay}
+                        className="w-10 h-10 rounded-full bg-cyan-400 text-black flex items-center justify-center hover:bg-cyan-300 transition-colors cursor-pointer shadow-lg shadow-cyan-400/20"
+                      >
+                        {isPlaying ? <Pause size={16} fill="black" /> : <Play size={16} fill="black" className="ml-0.5" />}
+                      </button>
+                    </div>
+
+                    {/* Scrubber & Timestamps */}
+                    <div className="space-y-1">
+                      <div
+                        onClick={handleSeek}
+                        className="h-1.5 w-full bg-zinc-800 rounded-full cursor-pointer relative"
+                      >
+                        <div
+                          className="h-full bg-cyan-400 rounded-full relative"
+                          style={{ width: `${(currentTime / (duration || 1)) * 100}%` }}
+                        >
+                          <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-white rounded-full shadow" />
+                        </div>
+                      </div>
+
+                      <div className="flex justify-between text-[10px] font-mono text-zinc-500">
+                        <span className="text-cyan-400 font-bold">{formatTime(currentTime)}</span>
+                        <span>{formatTime(duration)}</span>
+                      </div>
+                    </div>
+
+                    {/* Instagram Direct Link */}
+                    {selectedSong.insta && (
+                      <a
+                        href={selectedSong.insta}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="w-full py-1.5 sm:py-2 rounded-xl bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 text-[10px] sm:text-[11px] font-bold text-white flex items-center justify-center gap-1.5 transition-colors"
+                      >
+                        <span>View Official Instagram Reel</span>
+                        <ExternalLink size={12} className="text-zinc-400" />
+                      </a>
+                    )}
+
+                  </div>
 
                 </div>
-
-              </div>
 
             </motion.div>
           </motion.div>
