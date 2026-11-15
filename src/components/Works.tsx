@@ -525,10 +525,10 @@ export default function Works({ onPlayStateChange }: WorksProps) {
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[300] flex items-center justify-center p-0 sm:p-6 bg-black/95 backdrop-blur-2xl"
           >
-            {/* Top Close Button (Desktop & Mobile) */}
+            {/* Top Close Button (Desktop Only) */}
             <button
               onClick={handleClose}
-              className="absolute top-4 right-4 sm:top-6 sm:right-6 z-50 p-2.5 rounded-full bg-zinc-900/90 hover:bg-zinc-800 text-white border border-zinc-700 transition-colors shadow-2xl cursor-pointer"
+              className="hidden sm:flex absolute top-4 right-4 sm:top-6 sm:right-6 z-50 p-2.5 rounded-full bg-zinc-900/90 hover:bg-zinc-800 text-white border border-zinc-700 transition-colors shadow-2xl cursor-pointer"
               title="Close viewer (Esc)"
             >
               <X size={20} />
@@ -562,6 +562,63 @@ export default function Works({ onPlayStateChange }: WorksProps) {
               onClick={(e) => e.stopPropagation()}
             >
               
+              {/* MOBILE ONLY: Profile ID Header (Placed on TOP of the image) */}
+              <div className="md:hidden px-3.5 py-2.5 border-b border-zinc-850 flex items-center justify-between bg-zinc-950 flex-shrink-0 z-30">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-full p-0.5 bg-gradient-to-tr from-amber-500 via-pink-500 to-purple-600 flex-shrink-0">
+                    <div className="w-full h-full rounded-full overflow-hidden bg-black p-0.5">
+                      <img
+                        src="/profile.png"
+                        alt="Udaya"
+                        className="w-full h-full object-cover rounded-full"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-bold text-xs text-white">
+                        udaya____10
+                      </span>
+                      <span className="w-3.5 h-3.5 rounded-full bg-cyan-400 flex items-center justify-center text-[9px] text-black font-black" title="Verified Creator">
+                        ✓
+                      </span>
+                      <span className="text-zinc-500 text-xs">•</span>
+                      <a
+                        href="https://www.instagram.com/udaya____10/"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-[11px] font-bold text-cyan-400 hover:text-cyan-300"
+                      >
+                        Follow
+                      </a>
+                    </div>
+                    <span className="text-[10px] text-zinc-400 block">
+                      Tamil Lyricist & AI Music Creator
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-1">
+                  <a
+                    href={selectedSong.insta || "https://www.instagram.com/udaya____10/"}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="p-1.5 text-zinc-400 hover:text-white"
+                    title="Open on Instagram"
+                  >
+                    <MoreHorizontal size={18} />
+                  </a>
+                  <button
+                    onClick={handleClose}
+                    className="p-1.5 rounded-full text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors cursor-pointer"
+                    title="Close"
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
+              </div>
+
               {/* LEFT HALF: Media Stage (Image/Video with Play/Pause on Tap) */}
               <div 
                 className="relative w-full md:w-[52%] lg:w-[56%] h-[22vh] min-h-[160px] max-h-[220px] md:h-full md:max-h-none bg-black flex items-center justify-center select-none overflow-hidden group cursor-pointer shrink-0"
@@ -631,8 +688,8 @@ export default function Works({ onPlayStateChange }: WorksProps) {
               {/* RIGHT HALF: Instagram Profile Header, Lyrics & Controls */}
               <div className="w-full md:w-[48%] lg:w-[44%] flex-1 flex flex-col justify-between bg-zinc-950 border-t md:border-t-0 md:border-l border-zinc-850 h-full overflow-hidden min-h-0">
                 
-                {/* 1. Header (Instagram Profile Info) */}
-                <div className="p-3 sm:p-4 md:p-5 border-b border-zinc-850 flex items-center justify-between bg-zinc-950 flex-shrink-0">
+                {/* 1. Header (Instagram Profile Info - Desktop Only) */}
+                <div className="hidden md:flex p-4 md:p-5 border-b border-zinc-850 items-center justify-between bg-zinc-950 flex-shrink-0">
                   <div className="flex items-center gap-2.5 sm:gap-3">
                     <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full p-0.5 bg-gradient-to-tr from-amber-500 via-pink-500 to-purple-600 flex-shrink-0">
                       <div className="w-full h-full rounded-full overflow-hidden bg-black p-0.5">
