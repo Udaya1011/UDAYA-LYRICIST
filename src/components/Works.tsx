@@ -14,6 +14,15 @@ interface WorksProps {
   onPlayStateChange?: (playing: boolean) => void;
 }
 
+const getVibeTag = (title: string, lyrics?: string) => {
+  const t = (title + " " + (lyrics || "")).toLowerCase();
+  if (t.includes("iruttu") || t.includes("dark") || t.includes("maranam")) return "Midnight Melancholy";
+  if (t.includes("kangale") || t.includes("thanimai") || t.includes("pesadhaa") || t.includes("vidai")) return "Heartbreak Ballad";
+  if (t.includes("dhoorame") || t.includes("sambavam") || t.includes("thee")) return "Cinema Indie";
+  if (t.includes("thunaiyae") || t.includes("kaadhal") || t.includes("kanmaniyae") || t.includes("adiyae")) return "Soulful Romance";
+  return "Soulful Melody";
+};
+
 export default function Works({ onPlayStateChange }: WorksProps) {
   const [songs, setSongs] = useState<any[]>(() => {
     return INITIAL_SONGS.map((s) => {
@@ -42,6 +51,7 @@ export default function Works({ onPlayStateChange }: WorksProps) {
   const [likedSongs, setLikedSongs] = useState<Record<string, boolean>>({});
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const [showHeartAnim, setShowHeartAnim] = useState(false);
+  const [shareToast, setShareToast] = useState<{ show: boolean; msg: string }>({ show: false, msg: "" });
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -76,6 +86,24 @@ export default function Works({ onPlayStateChange }: WorksProps) {
   useEffect(() => {
     if (onPlayStateChange) onPlayStateChange(isPlaying);
   }, [isPlaying, onPlayStateChange]);
+
+  // Deep linking: auto-open song if ?song= param exists in URL
+  useEffect(() => {
+    if (typeof window === "undefined" || songs.length === 0) return;
+    const params = new URLSearchParams(window.location.search);
+    const songParam = params.get("song");
+    if (songParam) {
+      const clean = decodeURIComponent(songParam).toLowerCase().trim();
+      const idx = songs.findIndex(
+        (s) =>
+          (s._id && s._id.toLowerCase() === clean) ||
+          (s.title && s.title.toLowerCase().trim() === clean)
+      );
+      if (idx !== -1) {
+        handleOpenSong(idx);
+      }
+    }
+  }, [songs]);
 
   const filteredSongs = useMemo(() => {
     return songs.filter((s) => {
@@ -289,6 +317,44 @@ export default function Works({ onPlayStateChange }: WorksProps) {
     }
   };
 
+  const getSongShareUrl = (song: any) => {
+    if (typeof window === "undefined" || !song) return "";
+    const cleanId = encodeURIComponent(song._id || song.title);
+    return `${window.location.origin}/?song=${cleanId}`;
+  };
+
+  const handleShareSong = async (song: any, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    if (!song) return;
+
+    const shareUrl = getSongShareUrl(song);
+    const title = `${song.title} - Udaya | AI Music`;
+    const text = `🎵 Listen to "${song.title}" - Tamil lyrics & AI Music by Udaya:\n`;
+
+    // Always trigger the native system share sheet (shows all installed apps on user device)
+    if (typeof navigator !== "undefined" && navigator.share) {
+      try {
+        await navigator.share({
+          title,
+          text,
+          url: shareUrl,
+        });
+        return;
+      } catch (err: any) {
+        if (err.name === "AbortError") return; // User dismissed share sheet
+      }
+    }
+
+    // Fallback if browser/platform doesn't support Web Share API: direct copy to clipboard
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setShareToast({ show: true, msg: "Song link copied to clipboard! 📋" });
+      setTimeout(() => setShareToast({ show: false, msg: "" }), 3000);
+    } catch {
+      // Fallback
+    }
+  };
+
   return (
     <section id="works" className="py-20 bg-black relative">
       <div className="max-w-6xl mx-auto px-6">
@@ -368,7 +434,7 @@ export default function Works({ onPlayStateChange }: WorksProps) {
               onClick={() => handleOpenSong(idx)}
               className="glass-card bg-zinc-950 border border-zinc-850 hover:border-cyan-400/50 rounded-2xl overflow-hidden cursor-pointer group flex flex-col justify-between transition-all duration-300 hover:-translate-y-1"
             >
-              {/* Thumbnail with Instagram Post Hover */}
+              {/* Thumbnail with Transparent Play button */}
               <div className="relative aspect-square w-full overflow-hidden bg-zinc-900">
                 <img
                   src={work.thumbPath}
@@ -377,40 +443,10 @@ export default function Works({ onPlayStateChange }: WorksProps) {
                   loading="lazy"
                 />
 
-                {/* Instagram Style Hover Overlay */}
-                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4 text-white font-bold text-xs sm:text-sm">
-                  <div
-                    onClick={(e) => toggleSongLike(work._id, e)}
-                    className="flex items-center gap-1.5 hover:text-red-400 transition-colors"
-                  >
-                    <Heart
-                      size={18}
-                      className={cn(
-                        likedSongs[work._id]
-                          ? "fill-red-500 text-red-500"
-                          : "fill-white text-white"
-                      )}
-                    />
-                    <span>{likedSongs[work._id] ? "Liked" : "Like"}</span>
-                  </div>
-
-                  {/* Download right next to like */}
-                  <div
-                    onClick={(e) => handleDownload(work, e)}
-                    className="flex items-center gap-1.5 hover:text-cyan-400 transition-colors"
-                    title="Download Track"
-                  >
-                    {downloadingId === work._id ? (
-                      <span className="w-4 h-4 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin inline-block" />
-                    ) : (
-                      <Download size={18} />
-                    )}
-                    <span>Download</span>
-                  </div>
-
-                  <div className="flex items-center gap-1.5 hover:text-cyan-400 transition-colors">
-                    <Play size={18} fill="white" />
-                    <span>Play</span>
+                {/* Transparent Glass Play Button - Visible ONLY on hover */}
+                <div className="absolute inset-0 bg-black/35 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                  <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-black/45 backdrop-blur-md border border-white/35 text-white flex items-center justify-center shadow-lg transform scale-95 group-hover:scale-100 group-hover:border-cyan-400 group-hover:text-cyan-400 group-hover:shadow-[0_0_25px_rgba(0,243,255,0.45)] transition-all duration-300">
+                    <Play size={22} fill="currentColor" className="ml-0.5 transition-colors" />
                   </div>
                 </div>
 
@@ -434,17 +470,16 @@ export default function Works({ onPlayStateChange }: WorksProps) {
                   </p>
                 ) : null}
 
-                <div className="pt-2 flex items-center justify-between text-[11px] font-semibold text-cyan-400">
-                  <span>Open Track & Lyrics ↗</span>
+                <div className="pt-2 flex items-center justify-end" onClick={(e) => e.stopPropagation()}>
                   <div className="flex items-center gap-3">
                     {/* Like button */}
                     <button
                       onClick={(e) => toggleSongLike(work._id, e)}
-                      className="text-zinc-400 hover:text-red-400 transition-colors"
+                      className="text-zinc-400 hover:text-red-400 transition-colors cursor-pointer"
                       title={likedSongs[work._id] ? "Liked" : "Like"}
                     >
                       <Heart
-                        size={14}
+                        size={15}
                         className={cn(
                           likedSongs[work._id] ? "fill-red-500 text-red-500" : ""
                         )}
@@ -454,28 +489,24 @@ export default function Works({ onPlayStateChange }: WorksProps) {
                     {/* Download button next to like */}
                     <button
                       onClick={(e) => handleDownload(work, e)}
-                      className="text-zinc-400 hover:text-cyan-400 transition-colors"
+                      className="text-zinc-400 hover:text-cyan-400 transition-colors cursor-pointer"
                       title="Download MP3"
                     >
                       {downloadingId === work._id ? (
                         <span className="w-3.5 h-3.5 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin inline-block" />
                       ) : (
-                        <Download size={14} />
+                        <Download size={15} />
                       )}
                     </button>
 
-                    {work.insta && (
-                      <a
-                        href={work.insta}
-                        target="_blank"
-                        rel="noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        className="text-zinc-400 hover:text-pink-400 transition-colors"
-                        title="Instagram Post"
-                      >
-                        <Share2 size={13} />
-                      </a>
-                    )}
+                    {/* Share Track button */}
+                    <button
+                      onClick={(e) => handleShareSong(work, e)}
+                      className="text-zinc-400 hover:text-cyan-400 transition-colors cursor-pointer"
+                      title="Share Track"
+                    >
+                      <Share2 size={15} />
+                    </button>
                   </div>
                 </div>
               </div>
@@ -745,18 +776,14 @@ export default function Works({ onPlayStateChange }: WorksProps) {
                         <MessageCircle size={22} />
                       </button>
 
-                      {/* Share on Instagram */}
-                      {selectedSong.insta && (
-                        <a
-                          href={selectedSong.insta}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="text-white hover:text-pink-400 transition-colors cursor-pointer"
-                          title="Open Instagram Post"
-                        >
-                          <Share2 size={20} />
-                        </a>
-                      )}
+                      {/* Share Track */}
+                      <button
+                        onClick={() => handleShareSong(selectedSong)}
+                        className="text-white hover:text-cyan-400 transition-colors cursor-pointer"
+                        title="Share Track"
+                      >
+                        <Share2 size={21} />
+                      </button>
                     </div>
 
                     {/* Play/Pause Button */}
@@ -806,6 +833,21 @@ export default function Works({ onPlayStateChange }: WorksProps) {
               </div>
 
             </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Toast Notification */}
+      <AnimatePresence>
+        {shareToast.show && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-full bg-zinc-900/95 backdrop-blur-md border border-cyan-400/50 text-white text-xs font-semibold shadow-2xl flex items-center gap-2"
+          >
+            <Check size={14} className="text-cyan-400" />
+            <span>{shareToast.msg}</span>
           </motion.div>
         )}
       </AnimatePresence>
