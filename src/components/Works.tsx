@@ -897,14 +897,32 @@ export default function Works({ onPlayStateChange }: WorksProps) {
                           )}
                         </button>
 
-                        {/* Comment/Lyrics icon */}
-                        <button
-                          onClick={handleCopyLyrics}
-                          className="text-white hover:text-cyan-400 transition-colors cursor-pointer"
-                          title="Copy lyrics"
-                        >
-                          <MessageCircle size={22} />
-                        </button>
+                        {/* Instagram icon next to like & download */}
+                        {selectedSong.insta && (
+                          <a
+                            href={selectedSong.insta}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-white hover:text-pink-400 transition-colors cursor-pointer flex items-center justify-center"
+                            title="Open on Instagram"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="21"
+                              height="21"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+                              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                              <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+                            </svg>
+                          </a>
+                        )}
 
                         {/* Share Track */}
                         <button
@@ -944,19 +962,6 @@ export default function Works({ onPlayStateChange }: WorksProps) {
                         <span>{formatTime(duration)}</span>
                       </div>
                     </div>
-
-                    {/* Instagram Direct Link */}
-                    {selectedSong.insta && (
-                      <a
-                        href={selectedSong.insta}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="w-full py-1.5 sm:py-2 rounded-xl bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 text-[10px] sm:text-[11px] font-bold text-white flex items-center justify-center gap-1.5 transition-colors"
-                      >
-                        <span>View Official Instagram Reel</span>
-                        <ExternalLink size={12} className="text-zinc-400" />
-                      </a>
-                    )}
 
                   </div>
 
