@@ -52,6 +52,7 @@ export default function Works({ onPlayStateChange }: WorksProps) {
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const [showHeartAnim, setShowHeartAnim] = useState(false);
   const [shareToast, setShareToast] = useState<{ show: boolean; msg: string }>({ show: false, msg: "" });
+  const [showMobileLyrics, setShowMobileLyrics] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -144,6 +145,7 @@ export default function Works({ onPlayStateChange }: WorksProps) {
   // Open Instagram-style full page viewer
   const handleOpenSong = (index: number) => {
     setSelectedIndex(index);
+    setShowMobileLyrics(false);
     const song = filteredSongs[index];
 
     if (audioRef.current && song?.audioPath) {
@@ -159,6 +161,7 @@ export default function Works({ onPlayStateChange }: WorksProps) {
   const handleClose = () => {
     if (audioRef.current) audioRef.current.pause();
     setIsPlaying(false);
+    setShowMobileLyrics(false);
     setSelectedIndex(null);
   };
 
