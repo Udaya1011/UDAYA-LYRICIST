@@ -1,87 +1,95 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { PenTool, Mic2, Cpu, Headphones, ArrowRight, Music4 } from "lucide-react";
+import { PenTool, Music4, Cpu, Headphones, Sliders } from "lucide-react";
 
 const steps = [
-  { id: 1, title: "Lyric Composition", icon: <PenTool />, desc: "Drafting the initial Tamil lyrics with soulful emotion and storytelling.", color: "cyan-400" },
-  { id: 2, title: "Mood & Style Selection", icon: <Music4 />, desc: "Defining the musical vibe—melody, tempo, and instruments.", color: "purple-400" },
-  { id: 3, title: "AI Voice Synthesis", icon: <Cpu />, desc: "Using advanced AI models to generate high-quality vocals and backing tracks.", color: "pink-400" },
-  { id: 4, title: "Final Mastering", icon: <Headphones />, desc: "Mixing and polishing the final song for high-fidelity audio output.", color: "white" },
+  {
+    step: "01",
+    title: "Lyric Composition",
+    tag: "Concept & Rhyme",
+    desc: "Crafting original lyrics with emotional storytelling and poetic rhythm.",
+    icon: <PenTool className="w-5 h-5 text-cyan-400" />,
+  },
+  {
+    step: "02",
+    title: "Mood & Vibe",
+    tag: "Sound Architecture",
+    desc: "Defining the musical atmosphere, BPM, scale mode, and instrumentation.",
+    icon: <Music4 className="w-5 h-5 text-purple-400" />,
+  },
+  {
+    step: "03",
+    title: "AI Audio Synthesis",
+    tag: "Neural Generation",
+    desc: "Generating high-fidelity vocal stems and layered arrangements using AI sound models.",
+    icon: <Cpu className="w-5 h-5 text-pink-400" />,
+  },
+  {
+    step: "04",
+    title: "Mastering & Polish",
+    tag: "Master Release",
+    desc: "Equalization and dynamic mastering for crisp playback across all streaming platforms.",
+    icon: <Headphones className="w-5 h-5 text-emerald-400" />,
+  },
 ];
 
 export default function BehindSong() {
   return (
-    <section id="behind-the-song" className="py-24 bg-black/60 relative overflow-hidden">
-      {/* Decorative vertical lines removed */}
-      
-      <div className="container mx-auto px-6 relative z-10 text-center">
-        <motion.div
-           initial={{ opacity: 0, y: 20 }}
-           whileInView={{ opacity: 1, y: 0 }}
-           viewport={{ once: true }}
-           transition={{ duration: 1 }}
-           className="mb-20"
-        >
-          <h2 className="text-5xl md:text-7xl font-black mb-6 tracking-tighter uppercase tracking-widest">
-            BEHIND <span className="text-secondary-neon">THE SONG</span>
+    <section id="behind-the-song" className="py-20 bg-black">
+      <div className="max-w-5xl mx-auto px-6">
+        
+        {/* Section Header */}
+        <div className="text-center max-w-2xl mx-auto mb-14 space-y-3">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-cyan-400 text-xs font-semibold uppercase tracking-wider">
+            <Sliders size={13} />
+            <span>Creation Process</span>
+          </div>
+
+          <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-white uppercase">
+            BEHIND <span className="text-cyan-400">THE SONG</span>
           </h2>
-          <div className="w-48 h-2 mx-auto bg-gradient-to-r from-cyan-400 to-purple-600 rounded-full" />
-        </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 text-center">
-          {steps.map((step, i) => (
+          <p className="text-gray-400 text-sm leading-relaxed">
+            The 4-stage technical workflow from handwritten lyrics to a finished master track.
+          </p>
+        </div>
+
+        {/* 4 Steps Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {steps.map((s, idx) => (
             <motion.div
-              key={step.id}
-              initial={{ opacity: 0, scale: 0.8, y: 50 }}
-              whileInView={{ opacity: 1, scale: 1, y: 0 }}
+              key={s.step}
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.2 }}
-              className="relative group p-4"
+              transition={{ duration: 0.3, delay: idx * 0.08 }}
+              className="glass-card bg-zinc-950 border border-zinc-850 p-6 rounded-2xl flex flex-col justify-between space-y-4 hover:border-cyan-400/30"
             >
-              <div className="flex flex-col items-center gap-6">
-                <div className={`relative w-28 h-28 flex items-center justify-center rounded-3xl bg-black/50 border-2 border-${step.color}/20 group-hover:border-${step.color}/80 transition-all duration-500 overflow-hidden`}>
-                  <div className={`absolute inset-0 bg-${step.color}/5 group-hover:bg-${step.color}/20 transition-colors animate-pulse`} />
-                  <div className={`text-${step.color} relative z-10 w-12 h-12 flex items-center justify-center transform group-hover:scale-125 transition-transform`}>
-                    {step.icon}
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <h3 className={`text-2xl font-black tracking-tight text-${step.color} uppercase`}>{step.title}</h3>
-                  <p className="text-gray-400 text-sm font-medium leading-relaxed max-w-[200px] mx-auto italic">{step.desc}</p>
+              <div className="flex items-center justify-between">
+                <span className="font-mono text-2xl font-black text-zinc-700">
+                  {s.step}
+                </span>
+                <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center">
+                  {s.icon}
                 </div>
               </div>
 
-              {/* Progress Connector (Arrows) */}
-              {i < steps.length - 1 && (
-                <div className="absolute top-[56px] -right-[24px] md:block hidden text-white/10 group-hover:text-cyan-400/40 transition-colors animate-bounce-x">
-                  <ArrowRight size={48} />
-                </div>
-              )}
+              <div>
+                <span className="text-[11px] font-bold text-cyan-400 uppercase tracking-wider block mb-1">
+                  {s.tag}
+                </span>
+                <h3 className="text-base font-bold text-white tracking-tight">
+                  {s.title}
+                </h3>
+                <p className="text-gray-400 text-xs leading-relaxed mt-2">
+                  {s.desc}
+                </p>
+              </div>
             </motion.div>
           ))}
         </div>
 
-        {/* Call to action for the process */}
-        <motion.div 
-           initial={{ opacity: 0 }}
-           whileInView={{ opacity: 1 }}
-           viewport={{ once: true }}
-           transition={{ delay: 1 }}
-           className="mt-20 p-10 bg-white/5 border border-white/10 rounded-2xl max-w-4xl mx-auto"
-        >
-          <div className="flex items-center gap-2 justify-center mb-4 text-cyan-400 opacity-60">
-             <Mic2 size={24} />
-             <div className="h-0.5 w-12 bg-cyan-400/20" />
-             <Music4 size={24} />
-          </div>
-          <p className="text-gray-300 font-light text-xl leading-relaxed">
-            "Every song is a unique technical journey. I leverage the latest 
-            AI algorithms to turn your artistic vision into high-fidelity 
-            musical reality."
-          </p>
-        </motion.div>
       </div>
     </section>
   );

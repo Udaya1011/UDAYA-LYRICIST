@@ -6,7 +6,11 @@ export async function GET() {
   try {
     await connectToDatabase();
     const songs = await Song.find({}).sort({ createdAt: -1 });
-    return NextResponse.json(songs);
+    return NextResponse.json(songs, {
+      headers: {
+        "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
+      },
+    });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

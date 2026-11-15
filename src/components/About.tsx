@@ -1,99 +1,88 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { User, Sparkles, Languages, Music } from "lucide-react";
+import { Sparkles, Languages, Cpu, Disc3 } from "lucide-react";
 
-const skills = [
-  { name: "Tamil Lyrics Writing", icon: <Languages />, level: 95 },
-  { name: "AI Song Creation", icon: <Sparkles />, level: 85 },
-  { name: "Melody Structuring", icon: <Music />, level: 80 },
-  { name: "Storytelling", icon: <User />, level: 90 },
+const pillars = [
+  {
+    title: "Poetic Meter & Rhyme",
+    category: "Lyric Craft",
+    desc: "Mastery over poetic rhythm, structure, and emotional storytelling. Writing verses that roll effortlessly on melodies.",
+    icon: <Languages className="w-5 h-5 text-cyan-400" />,
+  },
+  {
+    title: "AI Neural Sound Synthesis",
+    category: "AI Synthesis",
+    desc: "Architecting generative audio models with customized prompts, vocal arrangements, and instrumental dynamics.",
+    icon: <Cpu className="w-5 h-5 text-purple-400" />,
+  },
+  {
+    title: "Cinema & Independent Music",
+    category: "Production",
+    desc: "Creating radio-ready tracks for short films, YouTube music videos, independent singles, and viral social reels.",
+    icon: <Disc3 className="w-5 h-5 text-emerald-400" />,
+  },
 ];
 
 export default function About() {
   return (
-    <section id="about" className="py-24 bg-black/40 backdrop-blur-3xl overflow-hidden">
-      <div className="container mx-auto px-6">
-        <div className="flex flex-col lg:flex-row gap-16 items-center">
-          {/* Text Content */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1 }}
-            className="flex-1 space-y-8"
-          >
-            <div className="relative inline-block">
-              <h2 className="text-4xl md:text-6xl font-black mb-10 tracking-tight">
-                WHO IS <span className="text-cyan-400">UDAYA?</span>
-              </h2>
-              <div className="absolute -bottom-4 left-0 w-32 h-2 bg-gradient-to-r from-cyan-400 to-purple-600 rounded-full" />
-            </div>
+    <section id="about" className="py-20 bg-black">
+      <div className="max-w-5xl mx-auto px-6">
+        
+        {/* Section Header */}
+        <div className="text-center max-w-2xl mx-auto mb-14 space-y-3">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-cyan-400 text-xs font-semibold uppercase tracking-wider">
+            <Sparkles size={13} />
+            <span>Artist Profile</span>
+          </div>
 
-            <p className="text-xl md:text-2xl text-gray-300 leading-relaxed font-light text-justify">
-              Passionate Tamil lyricist creating soulful lyrics and transforming 
-              them into songs using AI technology. I blend creativity with modern 
-              tools to bring music alive. My mission is to give every emotion a voice, 
-              using the power of language and the precision of AI to craft melodies 
-              that resonate with the soul.
-            </p>
+          <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-white uppercase">
+            WHO IS <span className="text-cyan-400">UDAYA?</span>
+          </h2>
 
-            <div className="grid grid-cols-2 gap-4">
-              {skills.map((skill, i) => (
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                  key={skill.name} 
-                  className="glass-card p-6 flex flex-col gap-3 group hover:scale-105 transition-transform cursor-default border-cyan-400/10 hover:border-cyan-400/40"
-                >
-                  <div className="text-cyan-400 w-10 h-10 flex items-center justify-center rounded-lg bg-cyan-400/10 group-hover:bg-cyan-400 group-hover:text-black transition-colors">
-                    {skill.icon}
-                  </div>
-                  <h3 className="font-bold text-gray-200 tracking-tight">{skill.name}</h3>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
+          <p className="text-gray-400 text-sm sm:text-base leading-relaxed">
+            Passionate lyricist creating soulful songs and transforming them into modern musical releases with AI technology.
+          </p>
+        </div>
 
-          {/* Visualization (Skill Bars) */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1 }}
-            className="flex-1 w-full max-w-xl"
-          >
-            <div className="glass-card p-10 space-y-10 border-white/5 bg-gradient-to-br from-white/10 to-transparent">
-              <h3 className="text-2xl font-black text-center text-white mb-2 tracking-widest uppercase">Expertise Level</h3>
-              
-              {skills.map((skill, i) => (
-                <div key={skill.name} className="space-y-3">
-                  <div className="flex justify-between font-bold text-sm tracking-widest text-gray-400 uppercase">
-                    <span>{skill.name}</span>
-                    <span className="text-cyan-400">{skill.level}%</span>
-                  </div>
-                  <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden relative">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      whileInView={{ width: `${skill.level}%` }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 1.5, delay: i * 0.2 }}
-                      className="absolute h-full bg-gradient-to-r from-cyan-400 to-purple-600 rounded-full shadow-[0_0_10px_rgba(0,243,255,0.4)]"
-                    />
-                  </div>
+        {/* Narrative & Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {pillars.map((pillar, i) => (
+            <motion.div
+              key={pillar.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: i * 0.1 }}
+              className="glass-card p-6 bg-zinc-950/80 border border-zinc-800 rounded-2xl flex flex-col justify-between space-y-4 hover:border-cyan-400/40"
+            >
+              <div className="space-y-3">
+                <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center">
+                  {pillar.icon}
                 </div>
-              ))}
-
-              <div className="mt-10 p-6 bg-cyan-400/5 border border-cyan-400/20 rounded-2xl">
-                <p className="text-gray-400 text-sm font-medium italic">
-                  "Lyrics are the soul, AI is the wings. I provide both."
+                <div>
+                  <span className="text-[11px] font-bold text-cyan-400 uppercase tracking-wider block">
+                    {pillar.category}
+                  </span>
+                  <h3 className="text-base font-bold text-white tracking-tight mt-0.5">
+                    {pillar.title}
+                  </h3>
+                </div>
+                <p className="text-gray-400 text-xs sm:text-sm leading-relaxed">
+                  {pillar.desc}
                 </p>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          ))}
         </div>
+
+        {/* Philosophy Quote */}
+        <div className="mt-10 p-6 rounded-2xl bg-zinc-950 border border-zinc-800 text-center max-w-2xl mx-auto">
+          <p className="text-gray-300 text-sm italic font-medium">
+            “Lyrics are the soul, AI is the wings. I provide both to make music alive.”
+          </p>
+        </div>
+
       </div>
     </section>
   );
